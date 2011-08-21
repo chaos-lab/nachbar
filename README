@@ -40,3 +40,7 @@ RUN
 CONTACTS
   Please send email to liufengyunchina@gmail.
 
+THANKS
+  The initial code is based on the chat example of socket.io, see below:
+  https://github.com/LearnBoost/socket.io/tree/master/examples/chat
+
