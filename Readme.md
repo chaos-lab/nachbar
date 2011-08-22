@@ -1,7 +1,7 @@
 # Nachbar
   Nachbar is going to be a location-based real-time network, which allows user to communicate with nearbys through broadcast or private messages.
 
-  The basic scenario is as follows:
+  The basic scenario is as following:
 
   - User A fill out a nickname and some extra info, then login(No registration needed).
   - The system judges user A's geological position by GPS or IP, then find and return nearbys to A.
@@ -25,24 +25,24 @@
 
   Softwares to install:  
 
-  - intall [node.js](http://nodejs.org/)
-  - install [npm](http://npmjs.org/)
+  * intall [node.js](http://nodejs.org/)
+  * install [npm](http://npmjs.org/)
 
     curl http://npmjs.org/install.sh | sh
 
-  - install [coffee-script](http://jashkenas.github.com/coffee-script/)
+  * install [coffee-script](http://jashkenas.github.com/coffee-script/)
 
     npm install -g coffee-script
 
-  - install [mongodb](http://www.mongodb.org/)
+  * install [mongodb](http://www.mongodb.org/)
 
   Source and Packages:
 
-  - get source code
+  * get source code
 
     git clone git://github.com/liufengyun/nachbar.git
 
-  - install packages
+  * install packages
 
     cd nachbar
 
