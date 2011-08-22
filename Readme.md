@@ -1,7 +1,7 @@
 # Nachbar
-  Nachbar is going to be a location-based real-time network, which allows user to communicate with nearbys through broadcast or private messages.
+Nachbar is going to be a location-based real-time network, which allows user to communicate with nearbys through broadcast or private messages.
 
-  The basic scenario is as following:
+The basic scenario is as following:
 
   - User A fill out a nickname and some extra info, then login(No registration needed).
   - The system judges user A's geological position by GPS or IP, then find and return nearbys to A.
@@ -10,7 +10,7 @@
 
 # Technology
 
-  Following technologies are used in the project:
+Following technologies are used in the project:
 
   - node.js
   - mongodb
@@ -23,42 +23,42 @@
 
 # How to run
 
-  ## Softwares to install
+## Softwares to install
 
-   First, intall [node.js](http://nodejs.org/)
+First, intall [node.js](http://nodejs.org/)
 
-   Second, install [npm](http://npmjs.org/)
+Second, install [npm](http://npmjs.org/)
 
     curl http://npmjs.org/install.sh | sh
 
-   Third, install [coffee-script](http://jashkenas.github.com/coffee-script/)
+Third, install [coffee-script](http://jashkenas.github.com/coffee-script/)
 
     npm install -g coffee-script
 
-   Finally, install [mongodb](http://www.mongodb.org/)
+Finally, install [mongodb](http://www.mongodb.org/)
 
-  ## Source and Packages
+## Source and Packages
 
-   First, get source code from github
+First, get source code from github
 
     git clone git://github.com/liufengyun/nachbar.git
 
-   Then, install packages
+Then, install packages
 
     cd nachbar
 
     npm install
 
-  Now run and have a cup of coffee:-)
+Now run and have a cup of coffee:-)
 
     coffee nachbar.coffee
   
 # Thanks
 
-  The initial code is based on the chat example of socket.io, see below:
+The initial code is based on the chat example of socket.io, see below:
 
-  https://github.com/LearnBoost/socket.io/tree/master/examples/chat
+https://github.com/LearnBoost/socket.io/tree/master/examples/chat
 
 # Contacts
 
-  Please send email to liufengyunchina@gmail.
+Please send email to liufengyunchina@gmail.
