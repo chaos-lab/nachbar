@@ -23,26 +23,27 @@
 
 # How to run
 
-  Softwares to install:  
+  ## Softwares to install
 
-  * intall [node.js](http://nodejs.org/)
-  * install [npm](http://npmjs.org/)
+   First, intall [node.js](http://nodejs.org/)
+
+   Second, install [npm](http://npmjs.org/)
 
     curl http://npmjs.org/install.sh | sh
 
-  * install [coffee-script](http://jashkenas.github.com/coffee-script/)
+   Third, install [coffee-script](http://jashkenas.github.com/coffee-script/)
 
     npm install -g coffee-script
 
-  * install [mongodb](http://www.mongodb.org/)
+   Finally, install [mongodb](http://www.mongodb.org/)
 
-  Source and Packages:
+  ## Source and Packages
 
-  * get source code
+   First, get source code from github
 
     git clone git://github.com/liufengyun/nachbar.git
 
-  * install packages
+   Then, install packages
 
     cd nachbar
 
