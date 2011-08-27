@@ -1,0 +1,69 @@
+#nickname(title="Create a profile")
+  form.wrap#set-nickname
+    p.validateTips Please type in your nickname
+    input#nick
+
+:stylus
+  .ui-dialog .ui-state-error 
+    padding .3em
+  .validateTips
+    border 1px solid transparent
+    padding 0.3em
+
+:coffeescript
+  $ ->
+    e_tips = $(".validateTips")
+    e_nickname = $("#nick")
+    allFields = $([]).add(e_nickname)
+
+    updateTips = (t) ->
+      $(".validateTips").text(t).addClass("ui-state-highlight")
+      setTimeout( -> 
+        $(".validateTips").removeClass("ui-state-highlight", 1500)
+      , 500)
+
+    checkLength = (o, n, min, max) ->
+      if o.val().length > max || o.val().length < min
+        o.addClass("ui-state-error")
+        updateTips("Length of " + n + " must be between " +  min + " and " + max + ".")
+        return false
+      else
+        return true
+
+    checkRegexp = (o, regexp, n) ->
+      if !regexp.test o.val()
+        o.addClass("ui-state-error")
+        updateTips(n)
+        return false
+      else
+        return true
+
+    $("#set-nickname").submit -> return false
+
+    submit = ->
+      bValid = true
+      allFields.removeClass "ui-state-error"
+
+      bValid = checkLength(e_nickname, "nickname", 3, 16)
+      bValid = bValid && checkRegexp(e_nickname, /\^[a\-z]\([0\-9a\-z_]\)\+$/i, "Username may consist of a-z, 0-9, underscores, begin with a letter." )
+
+      if !bValid
+        return
+
+      name = e_nickname.val()
+      socket.emit 'nickname', name, (set) =>
+        if !set
+          $(this).dialog("close")
+        else
+          updateTips("Nickname already in use")
+
+    $("#nickname").dialog {
+      autoOpen: true,
+      position: 'top',
+      height: 400,
+      width: 600,
+      modal: true,
+      buttons: { "Register": submit },
+    }
+
+

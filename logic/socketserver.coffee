@@ -14,37 +14,36 @@ socketServer.start = (app) ->
   io = sio.listen(app)
 
   io.sockets.on 'connection', (socket) ->
+    # send message event
     socket.on 'user message', (msg) ->
-      socket.broadcast.emit('user message', socket.nickname, msg)
-  
+      # only user with a nickname can speak
+      socket.close if !socket.user
+      socket.broadcast.emit('user message', socket.user.name, msg)
+
+    # set nickname event
     socket.on 'nickname', (nick, fn) ->
-      console.log 'nickname function'
-      User.findOne {name:nick}, (err, doc) ->
-        if doc
-          fn(true)
-        else
-          fn(false)
+      # name already used
+      if User.collections[nick]
+         fn(true)
+         return
 
-          user = new User()
-          user.name =  socket.nickname = nick
-          user.socket = socket
-          user.save()
+      fn(false)
+      User.add(nick, socket)
 
-          socket.broadcast.emit('announcement', nick + ' connected')
-          User.find {}, (err, docs) ->
-            nicknames = []
-            nicknames.unshift  doc.name for doc in docs
-            io.sockets.emit('nicknames', nicknames)
+      socket.broadcast.emit('announcement', nick + ' connected')
+      io.sockets.emit('nicknames', User.names())
+
+    # set user profile
+    socket.on 'update profile', (data) ->
+      socket.user.update(dat)
   
+    # disconnect event
     socket.on 'disconnect', ->
-      return if !socket.nickname
-  
-      User.findOne {name:socket.nickname}, (err, doc) ->
-        doc.remove() if doc
+      return if !socket.user
+      
+      # delete user from data store
+      delete User.collections[socket.user.name]
 
-      socket.broadcast.emit('announcement', socket.nickname + ' disconnected')
-      User.find {}, (err, docs) ->
-        nicknames = []
-        nicknames.unshift  doc.name for doc in docs
-        io.sockets.emit('nicknames', nicknames)
+      socket.broadcast.emit('announcement', socket.user.name + ' disconnected')
+      io.sockets.emit('nicknames', User.names())
 

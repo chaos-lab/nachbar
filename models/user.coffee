@@ -14,9 +14,28 @@ exports = module.exports = User
 # user's connection channel
 User::socket = null
 
-# send message to current user
-User::sendData =  (message) ->
-  @socket.send(message)
+# stores (user name, user) pair
+User.collections = {}
+
+# add a user, store it in DB & memory
+User.add = (name, socket) ->
+  user = new User()
+  user.name =  name
+  user.socket = socket
+  socket.user = user
+  # currently just save data in memory
+  # user.save()
+  User.collections[name] = user
+
+# update user profile, except name
+User.update = (data) ->
+
+
+# return an array of user names
+User.names = ->
+  nicknames = []
+  nicknames.unshift name for name, user of User.collections
+  return nicknames
 
 console.log "user.coffeescript required"
 

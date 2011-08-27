@@ -4,10 +4,11 @@
   , "version": "0.0.1"
   , "dependencies": {
         "express": "2.3.11"
-      , "jade": "0.12.1"
-      , "stylus": "0.13.3"
+      , "jade": "0.14.2"
+      , "stylus": "0.15.1"
       , "nib": "0.0.8"
       , "socket.io": "0.7.9"
       , "mongoose": "1.8.1"
+      , "coffee-script": "1.1.2"
     }
 }
