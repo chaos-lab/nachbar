@@ -8,15 +8,9 @@ module.exports = app = express.createServer()
 #configurations
 app.configure ->
   app.use stylus.middleware
-     src: __dirname + '/../views/styles'
-     dest: __dirname + '/../public/stylesheets'
-     compile: (str, path) ->
-       stylus(str).set('filename', path)
-
-  app.use express.compiler
-    src: __dirname + '/../views/scripts'
-    dest: __dirname + '/../public/javascripts'
-    enable: ['coffeescript']
+     src: __dirname + '/../views'
+     dest: __dirname + '/../public'
+     compile: (str, path) ->  stylus(str).set('filename', path)
 
   app.use(express.static(__dirname + '/../public'))
 
