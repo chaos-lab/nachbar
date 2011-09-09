@@ -28,10 +28,9 @@ socket.on('error', function (e) {
   message('System', e ? e : 'A unknown error occurred');
 });
 
-socket.on('user message', message);
-function message (from, msg) {
+socket.on('user message', function (from, msg) {
   dt = new Date;
   msg = msg.replace(/\\n/g, "<br/>");
   $('#lines').append($('<p>').append(dt.toLocaleTimeString(), $('<b>').text(from), msg));
-}
+});
 
