@@ -37,8 +37,6 @@ User.names = ->
   nicknames.unshift name for name, user of User.collections
   return nicknames
 
-console.log "user.coffeescript required"
-
 # User realtime information
 #
 # User  <---->  EndPoints

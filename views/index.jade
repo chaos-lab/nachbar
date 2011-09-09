@@ -1,92 +1,32 @@
-doctype 5
-html
-  head
-    link(href='/stylesheets/style.css', rel='stylesheet')
-    link(href='/jquery-ui-1.8.16/jquery-ui-1.8.16.css', rel='stylesheet')
-    link(href='/blueprint/screen.css', rel='stylesheet', media='screen, projection')
-    link(href='/blueprint/print.css', rel='stylesheet', media='print')
+!=partial('register')
 
-    // [if lt IE 8]
-      link(href='/blueprint/ie.css', rel='stylesheet', media="screen, projection")
+.container
+  !=partial('map')
 
-    script(src='/javascripts/jquery-1.6.2.js')
-    script(src='/jquery-ui-1.8.16/jquery-ui-1.8.16.js')
-    script(src='/socket.io/socket.io.js')
-    script(src='http://maps.googleapis.com/maps/api/js?sensor=false')
+.container
+  #chat.span-24
+    form#send-message
+      textarea#message
+      button Send
+    #messages
+      #nicknames
+      #lines
 
-    script
-      // socket.io specific code
-      var socket = io.connect();
+script
+  // dom manipulation
+  $(function () {
+    $('#send-message').submit(function () {
+      message('me', $('#message').val());
+      socket.emit('user message', $('#message').val());
+      $('#message').val('').focus();
+      $('#lines').get(0).scrollTop = 10000000;
+      return false;
+    });
 
-      socket.on('connect', function () {
-      });
-
-      socket.on('announcement', function (msg) {
-        $('#lines').append($('<p>').append($('<em>').text(msg)));
-      });
-
-      socket.on('nicknames', function (nicknames) {
-        $('#nicknames').empty().append($('<span>Online: </span>'));
-        for (var i = 0; i < nicknames.length; i++) {
-          $('#nicknames').append($('<b>').text(nicknames[i]));
-        }
-      });
-
-      socket.on('reconnect', function () {
-        $('#lines').remove();
-        message('System', 'Reconnected to the server');
-      });
-
-      socket.on('reconnecting', function () {
-        message('System', 'Attempting to re-connect to the server');
-      });
-
-      socket.on('error', function (e) {
-        message('System', e ? e : 'A unknown error occurred');
-      });
-
-      socket.on('user message', message);
-      function message (from, msg) {
-        dt = new Date;
-        msg = msg.replace(/\\n/g, "<br/>");
-        $('#lines').append($('<p>').append(dt.toLocaleTimeString(), $('<b>').text(from), msg));
+    $("#message").keyup(function(event){
+      if(event.keyCode == 13){
+        $("#send-message button").click();
       }
-
-      // dom manipulation
-      $(function () {
-        $('#send-message').submit(function () {
-          message('me', $('#message').val());
-          socket.emit('user message', $('#message').val());
-          $('#message').val('').focus();
-          $('#lines').get(0).scrollTop = 10000000;
-          return false;
-        });
-
-        $("#message").keyup(function(event){
-          if(event.keyCode == 13){
-            $("#send-message button").click();
-          }
-       });
-      })
-
-  body
-    !=partial('register')
-
-    .container
-      h2 Welcome to use Nachbar!
-
-    .container
-      !=partial('map')
-
-    .container
-      #chat.span-24
-        form#send-message
-          textarea#message
-          button Send
-        #messages
-          #nicknames
-          #lines
-
-    .container
-      p Nachbar &copy 2011
+   });
+  })
 
