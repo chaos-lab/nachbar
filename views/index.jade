@@ -3,9 +3,17 @@ html
   head
     link(href='/stylesheets/style.css', rel='stylesheet')
     link(href='/jquery-ui-1.8.16/jquery-ui-1.8.16.css', rel='stylesheet')
+    link(href='/blueprint/screen.css', rel='stylesheet', media='screen, projection')
+    link(href='/blueprint/print.css', rel='stylesheet', media='print')
+
+    // [if lt IE 8]
+      link(href='/blueprint/ie.css', rel='stylesheet', media="screen, projection")
+
     script(src='/javascripts/jquery-1.6.2.js')
     script(src='/jquery-ui-1.8.16/jquery-ui-1.8.16.js')
     script(src='/socket.io/socket.io.js')
+    script(src='http://maps.googleapis.com/maps/api/js?sensor=false')
+
     script
       // socket.io specific code
       var socket = io.connect();
@@ -53,16 +61,32 @@ html
           $('#lines').get(0).scrollTop = 10000000;
           return false;
         });
+
+        $("#message").keyup(function(event){
+          if(event.keyCode == 13){
+            $("#send-message button").click();
+          }
+       });
       })
 
   body
     !=partial('register')
 
-    #chat
-      #messages
-        #nicknames
-        #lines
-      form#send-message
-        textarea#message
-        button Send
+    .container
+      h2 Welcome to use Nachbar!
+
+    .container
+      !=partial('map')
+
+    .container
+      #chat.span-24
+        form#send-message
+          textarea#message
+          button Send
+        #messages
+          #nicknames
+          #lines
+
+    .container
+      p Nachbar &copy 2011
 

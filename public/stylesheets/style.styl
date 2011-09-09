@@ -1,18 +1,7 @@
-@import 'nib'
-
-#chat, #messages
-  width 600px
-
-#chat
-  position relative
-  border 1px solid #ccc
-  margin 30px auto 0
-
-.none
-  display none
+#map_area
+  height: 400px
 
 #messages
-  height 380px
   background #eee
   em
     text-shadow 0 1px 0 #fff
@@ -42,29 +31,10 @@
       border-radius 10px
       text-shadow 0 1px 0 #666
   #lines
-    height 355px
+    height 300px
     overflow auto
     overflow-x hidden
     overflow-y auto
-    &::-webkit-scrollbar
-      width 6px
-      height 6px
-    &::-webkit-scrollbar-button:start:decrement, ::-webkit-scrollbar-button:end:increment
-      display block
-      height 10px
-    &::-webkit-scrollbar-button:vertical:increment
-      background-color #fff
-    &::-webkit-scrollbar-track-piece
-      background-color #fff
-      -webkit-border-radius 3px
-    &::-webkit-scrollbar-thumb:vertical
-      height 50px
-      background-color #ccc
-      -webkit-border-radius 3px
-    &::-webkit-scrollbar-thumb:horizontal
-      width 50px
-      background-color #fff
-      -webkit-border-radius 3px
 
 #send-message
   background #fff
@@ -72,7 +42,7 @@
   textarea
     border none
     box-shadow 0px 0px 4px grey
-    height 50px
+    height 30px
     padding 5px 10px
     vertical-align middle
     width 84%
@@ -85,6 +55,4 @@
     width 10%
     height 40px
 
-button
-  download-button()
 

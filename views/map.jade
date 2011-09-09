@@ -1,0 +1,19 @@
+#map_area.span-24
+
+script
+  $(window).load(function() {
+    var latlng = new google.maps.LatLng(-34.397, 150.644);
+    var myOptions = { 
+      zoom: 8,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };  
+    var map = new google.maps.Map($("#map_area").get(0),  myOptions);
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude), 13);
+      })  
+    }   
+  })  
+
