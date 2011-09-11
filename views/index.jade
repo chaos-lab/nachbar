@@ -16,10 +16,9 @@ script
   // dom manipulation
   $(function () {
     $('#send-message').submit(function () {
-      message('me', $('#message').val());
-      socket.emit('user message', $('#message').val());
+      nachbar.view.message('me', $('#message').val());
+      nachbar.socket.emit('user message', $('#message').val());
       $('#message').val('').focus();
-      $('#lines').get(0).scrollTop = 10000000;
       return false;
     });
 
@@ -27,6 +26,14 @@ script
       if(event.keyCode == 13){
         $("#send-message button").click();
       }
-   });
+    });
+
+    //message function : interface to other modules
+    nachbar.view.message = function (from, msg) {
+      dt = new Date;
+      msg = msg.replace(/\\n/g, "<br/>");
+      $('#lines').prepend($('<p>').append(dt.toLocaleTimeString(), $('<b>').text(from), msg));
+    };
+
   })
 

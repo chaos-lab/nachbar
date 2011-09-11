@@ -1,6 +1,9 @@
-webapp = require('./logic/webserver')
-sockapp = require('./logic/socketserver')
+global.nachbar = {}
 
-webapp.start()
-sockapp.start(webapp)
+nachbar.config = require('./utils/config')
+nachbar.webapp = require('./logic/webserver')
+nachbar.sockapp = require('./logic/socketserver')
+
+nachbar.webapp.start()
+nachbar.sockapp.start(nachbar.webapp)
 

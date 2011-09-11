@@ -47,23 +47,20 @@
       bValid = checkLength(e_nickname, "nickname", 3, 16)
       bValid = bValid && checkRegexp(e_nickname, /\^[a\-z]\([0\-9a\-z_]\)\+$/i, "Username may consist of a-z, 0-9, underscores, begin with a letter." )
 
-      if !bValid
-        return
+      return if !bValid
 
       name = e_nickname.val()
-      socket.emit 'nickname', name, (set) =>
+      nachbar.socket.emit 'nickname', name, (set) =>
         if !set
           $(this).dialog("close")
         else
           updateTips("Nickname already in use")
 
-    $("#nickname").dialog {
-      autoOpen: true,
-      position: 'top',
-      height: 400,
-      width: 600,
-      modal: true,
-      buttons: { "Register": submit },
-    }
-
+    $("#nickname").dialog
+      autoOpen: true
+      position: 'top'
+      height: 400
+      width: 600
+      modal: true
+      buttons: { "Register": submit }
 

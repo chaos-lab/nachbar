@@ -1,6 +1,5 @@
 express = require('express')
 stylus = require('stylus')
-config = require('../utils/config')
 
 #create express
 module.exports = app = express.createServer()
@@ -32,7 +31,7 @@ app.get '/', (req, res) ->
   res.render('index')
 
 app.start =  ->
-  app.listen config.webserver.port, ->
+  app.listen nachbar.config.webserver.port, ->
     addr = app.address()
     console.log('app listening on http://' + addr.address + ':' + addr.port)
 
