@@ -1,7 +1,8 @@
-#nickname(title="Create a profile")
+#nickname.none(title="Create a profile")
   form.wrap#set-nickname
     p.validateTips Please type in your nickname
     input#nick
+    button#submit Send
 
 :stylus
   .ui-dialog .ui-state-error 
@@ -38,7 +39,11 @@
       else
         return true
 
-    $("#set-nickname").submit -> return false
+    $("#set-nickname").submit -> 
+      submit()
+      return false
+
+    $("#set-nickname #submit").click submit
 
     submit = ->
       bValid = true
@@ -52,15 +57,8 @@
       name = e_nickname.val()
       nachbar.socket.emit 'nickname', name, (set) =>
         if !set
-          $(this).dialog("close")
+          nachbar.me = { name: name }
+          $("#nickname").dialog("close")
         else
           updateTips("Nickname already in use")
-
-    $("#nickname").dialog
-      autoOpen: true
-      position: 'top'
-      height: 400
-      width: 600
-      modal: true
-      buttons: { "Register": submit }
 

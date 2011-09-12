@@ -8,7 +8,12 @@
     form#send-message
       textarea#message
       button Send
-    #messages
+.container
+  #navigation-area.span-4
+    .navigation-item
+      span broadcast
+  #message-area.span-20.last
+    #global-messages.message-box
       #nicknames
       #lines
 
@@ -16,10 +21,22 @@ script
   // dom manipulation
   $(function () {
     $('#send-message').submit(function () {
-      nachbar.view.message('me', $('#message').val());
-      nachbar.socket.emit('user message', $('#message').val());
-      $('#message').val('').focus();
-      return false;
+      if (!nachbar.me) {
+        $("#nickname").dialog({
+          autoOpen: true,
+          position: 'center',
+          modal: true,
+          close: function() {
+            if (nachbar.me) $('#send-message').submit();
+          }
+        })
+        return false;
+      } else {
+        nachbar.view.message('me', $('#message').val());
+        nachbar.socket.emit('user message', $('#message').val());
+        $('#message').val('').focus();
+        return false;
+      }
     });
 
     $("#message").keyup(function(event){
@@ -30,9 +47,11 @@ script
 
     //message function : interface to other modules
     nachbar.view.message = function (from, msg) {
+      if(!msg) return;
+
       dt = new Date;
       msg = msg.replace(/\\n/g, "<br/>");
-      $('#lines').prepend($('<p>').append(dt.toLocaleTimeString(), $('<b>').text(from), msg));
+      $('#global-messages #lines').prepend($('<p>').append(dt.toLocaleTimeString(), $('<b>').text(from), msg));
     };
 
   })

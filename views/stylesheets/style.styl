@@ -1,7 +1,20 @@
 #map_area
   height: 400px
 
-#messages
+#navigation-area
+  display inline-block
+  .navigation-item
+    cursor pointer
+    span
+      display: block
+      color #fff
+      background #999
+      padding 3px 6px
+      border-radius 3px
+      text-shadow 0 1px 0 #666
+      text-decoration none
+
+#global-messages
   background #eee
   em
     text-shadow 0 1px 0 #fff
@@ -17,6 +30,8 @@
   p:nth-child(even)
     background #fafafa
   #nicknames
+    border-top-left-radius 3px
+    border-top-right-radius 3px
     background #ccc
     padding 2px 4px 4px
     font 11px Helvetica
@@ -35,6 +50,8 @@
     overflow auto
     overflow-x hidden
     overflow-y auto
+    border-bottom-right-radius 3px
+    border-bottom-left-radius 3px
 
 #send-message
   background #fff

@@ -14,6 +14,9 @@ socketServer.start = (app) ->
   io = sio.listen(app)
 
   io.sockets.on 'connection', (socket) ->
+    # send a list of users to client
+    socket.emit('nicknames', User.names());
+
     # send message event
     socket.on 'user message', (msg) ->
       # only user with a nickname can speak
@@ -32,10 +35,6 @@ socketServer.start = (app) ->
 
       socket.broadcast.emit('announcement', nick + ' connected')
       io.sockets.emit('nicknames', User.names())
-
-    # set user profile
-    socket.on 'update profile', (data) ->
-      socket.user.update(dat)
   
     # disconnect event
     socket.on 'disconnect', ->

@@ -5,10 +5,12 @@ nachbar.socket = io.connect();
 nachbar.view = nachbar.view || {};
 
 nachbar.socket.on('connect', function () {
+  nachbar.view.message('System', 'You have been connected to server.');
 });
 
 nachbar.socket.on('announcement', function (msg) {
   $('#lines').append($('<p>').append($('<em>').text(msg)));
+  nachbar.view.message("", "<em>" + msg + "</em>");
 });
 
 nachbar.socket.on('nicknames', function (nicknames) {
@@ -19,7 +21,7 @@ nachbar.socket.on('nicknames', function (nicknames) {
 });
 
 nachbar.socket.on('reconnect', function () {
-  $('#lines').remove();
+  $('#lines').html("");
   nachbar.view.message('System', 'Reconnected to the server');
 });
 
@@ -31,5 +33,7 @@ nachbar.socket.on('error', function (e) {
   nachbar.view.message('System', e ? e : 'A unknown error occurred');
 });
 
-nachbar.socket.on('user message', nachbar.view.message);
+nachbar.socket.on('user message', function(from, msg) {
+  nachbar.view.message(from, msg);
+})
 
