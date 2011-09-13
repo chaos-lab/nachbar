@@ -19,7 +19,8 @@ script
       browserSupportFlag = true;
       navigator.geolocation.getCurrentPosition(function(position) {
         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        map.setCenter(pos, 13);
+        map.setCenter(pos);
+        map.setZoom(13);
         setMyLocation(pos);
       }, function() {
         handleNoGeolocation(browserSupportFlag);
@@ -31,6 +32,7 @@ script
       geo.getCurrentPosition(function(position) {
         initialLocation = new google.maps.LatLng(position.latitude,position.longitude);
         map.setCenter(initialLocation);
+        map.setZoom(13);
         setMyLocation(pos);
       }, function() {
         handleNoGeoLocation(browserSupportFlag);
