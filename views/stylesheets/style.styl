@@ -1,5 +1,21 @@
-#map_area
-  height: 400px
+body
+  background-color #F0F0F0
+  color #333333
+  margin 0
+  padding 0 0 10px
+
+.content
+  padding 10px 
+  color #333333
+  overflow hidden
+  box-shadow 0 0 10px 0 #CCCCCC
+  background-color #FAFAFA
+
+#map-area
+  height 400px
+
+#chat-area
+  margin-top 10px
 
 #navigation-area
   display inline-block
@@ -7,15 +23,13 @@
     cursor pointer
     span
       display: block
-      color #fff
-      background #999
+      background white
       padding 3px 6px
-      border-radius 3px
-      text-shadow 0 1px 0 #666
+      border-radius 5px
+      box-shadow 1px 1px 5px 0 #d0d0d0
       text-decoration none
 
 #global-messages
-  background #eee
   em
     text-shadow 0 1px 0 #fff
     color #999
@@ -54,7 +68,6 @@
     border-bottom-left-radius 3px
 
 #send-message
-  background #fff
   position relative
   textarea
     border none

@@ -1,14 +1,11 @@
 !=partial('register')
 
-.container
-  !=partial('map')
+!=partial('map')
 
-.container
-  #chat.span-24
-    form#send-message
-      textarea#message
-      button Send
-.container
+.container.content#chat-area
+  form#send-message
+    textarea#message
+    button Send
   #navigation-area.span-4
     .navigation-item
       span broadcast

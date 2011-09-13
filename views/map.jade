@@ -1,15 +1,16 @@
-#map_area.span-24
+.container.content#map-container
+  #map-area.span-24
 
 script
   $(window).load(function() {
     var latlng = new google.maps.LatLng(32.060255, 118.796877);
     var myOptions = { 
-      zoom: 13,
+      zoom: 2,
       center: latlng,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };  
 
-    var map = new google.maps.Map($("#map_area").get(0),  myOptions);
+    var map = new google.maps.Map($("#map-area").get(0),  myOptions);
     map.markers = {};
     nachbar.map = map;
 
@@ -47,7 +48,7 @@ script
         alert("Your browser doesn't support geolocation.");
       }
       setMyLocation(latlng);
-      map.setZoom(0);
+      map.setZoom(2);
     }
 
     function setMyLocation(pos) {
