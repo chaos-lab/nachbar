@@ -3,9 +3,12 @@
 !=partial('map')
 
 .container.content#chat-area
-  form#send-message
-    textarea#message
-    button Send
+  #editor-area
+    #avatar
+      img(src='/images/noavatar.png')
+    form#send-message
+      textarea#message
+      button Send
   #navigation-area.span-4
     .navigation-item
       span broadcast
@@ -18,7 +21,7 @@ script
   // dom manipulation
   $(function () {
     $('#send-message').submit(function () {
-      if (!nachbar.me) {
+      if (nachbar.me.name == "") {
         $("#nickname").dialog({
           autoOpen: true,
           position: 'center',
@@ -43,6 +46,7 @@ script
     });
 
     //message function : interface to other modules
+    nachbar.view = nachbar.view || {};
     nachbar.view.message = function (from, msg) {
       if(!msg) return;
 

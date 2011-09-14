@@ -3,10 +3,10 @@ Nachbar is going to be a location-based real-time network, which allows user to 
 
 The basic scenario is as following:
 
-  - User A fill out a nickname and some extra info, then login(No registration needed).
+  - User A fills out nickname and some extra info, then login(No registration needed).
   - The system judges user A's geological position by GPS or IP, then find and return nearbys to A.
   - The client(browser or app) displays the nearbys on a map or as a list.
-  - User A sends private message to one nearby B, or broadcast a message so that all nearbys can receive it.
+  - User A sends private message to one nearby B, or broadcasts a message so that all nearbys can receive it.
 
 # Technology
 
@@ -19,7 +19,9 @@ Following technologies are used in the project:
   - express
   - jade
   - jquery
+  - jquery-ui
   - socket.io
+  - backbone.js
 
 # How to run
 

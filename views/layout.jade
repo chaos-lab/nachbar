@@ -4,6 +4,7 @@ html
     link(href='/jquery-ui-1.8.16/jquery-ui-1.8.16.css', rel='stylesheet')
     link(href='/stylesheets/blueprint/screen.css', rel='stylesheet', media='screen, projection')
     link(href='/stylesheets/blueprint/print.css', rel='stylesheet', media='print')
+    link(href='/stylesheets/common.css', rel='stylesheet')
     link(href='/stylesheets/style.css', rel='stylesheet')
 
     // [if lt IE 8]
@@ -11,13 +12,18 @@ html
 
     script(src='/javascripts/vendor/jquery-1.6.2.js')
     script(src='/jquery-ui-1.8.16/jquery-ui-1.8.16.js')
+    script(src='/javascripts/vendor/json2.js')
+    script(src='/javascripts/vendor/underscore.js')
+    script(src='/javascripts/vendor/backbone.js')
     script(src='/socket.io/socket.io.js')
     script(src='http://maps.googleapis.com/maps/api/js?sensor=false')
 
-    script(src='/javascripts/socket.js')
+    script(src='/javascripts/models/profile.js')
+    script(src='/javascripts/nachbar.js')
   body
-    #header.container
-      h2 Welcome to use Nachbar!
+    #header
+      .container.content
+        h2 Nachbar!
 
     != body
 

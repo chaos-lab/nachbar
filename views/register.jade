@@ -57,7 +57,7 @@
       name = e_nickname.val()
       nachbar.socket.emit 'nickname', name, (set) =>
         if !set
-          nachbar.me = { name: name }
+          nachbar.me.name = name
           $("#nickname").dialog("close")
         else
           updateTips("Nickname already in use")

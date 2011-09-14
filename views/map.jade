@@ -4,14 +4,13 @@
 script
   $(window).load(function() {
     var latlng = new google.maps.LatLng(32.060255, 118.796877);
-    var myOptions = { 
+    var myOptions = {
       zoom: 2,
       center: latlng,
       mapTypeId: google.maps.MapTypeId.ROADMAP
-    };  
+    };
 
     var map = new google.maps.Map($("#map-area").get(0),  myOptions);
-    map.markers = {};
     nachbar.map = map;
 
     // Try W3C Geolocation (Preferred)
@@ -21,7 +20,7 @@ script
         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         map.setCenter(pos);
         map.setZoom(13);
-        setMyLocation(pos);
+        nachbar.me.updateLocation(position.coords.latitude, position.coords.longitude);
       }, function() {
         handleNoGeolocation(browserSupportFlag);
       });
@@ -30,10 +29,10 @@ script
       browserSupportFlag = true;
       var geo = google.gears.factory.create('beta.geolocation');
       geo.getCurrentPosition(function(position) {
-        initialLocation = new google.maps.LatLng(position.latitude,position.longitude);
+        initialLocation = new google.maps.LatLng(position.latitude, position.longitude);
         map.setCenter(initialLocation);
         map.setZoom(13);
-        setMyLocation(pos);
+        nachbar.me.updateLocation(position.coords.latitude, position.coords.longitude);
       }, function() {
         handleNoGeoLocation(browserSupportFlag);
       });
@@ -42,44 +41,14 @@ script
       browserSupportFlag = false;
       handleNoGeolocation(browserSupportFlag);
     }
-    
+
     function handleNoGeolocation(errorFlag) {
       if (errorFlag == true) {
         alert("Geolocation service failed.");
       } else {
         alert("Your browser doesn't support geolocation.");
       }
-      setMyLocation(latlng);
+      nachbar.me.updateLocation(latlng.lat(), latlng.lng());
       map.setZoom(2);
     }
-
-    function setMyLocation(pos) {
-      var key = "me"
-      if (!map.markers[key]) {
-        var marker = new google.maps.Marker({
-          position: pos,
-          draggable: true,
-          animation: google.maps.Animation.DROP,
-          map: map,
-          title: "It's you!"
-        });
-        map.markers[key] = marker;
-
-        var infowindow = new google.maps.InfoWindow({
-          content: "It's you! Drag to move your location."
-        });
-        google.maps.event.addListener(marker, 'mouseover', function() {
-          infowindow.open(map, marker);
-        })
-        google.maps.event.addListener(marker, 'mouseout', function() {
-          infowindow.close();
-        })
-
-      } else {
-        map.markers[key].setPosition(pos);
-        map.markers[key].setTitle(title);
-      }
-    }
-
-  })  
-
+  })
