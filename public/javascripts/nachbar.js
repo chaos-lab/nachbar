@@ -36,18 +36,57 @@ nachbar.me.bind("change:location", function() {
 
 // notify server when location changes
 nachbar.me.bind("change:location", function() {
-  if (nachbar.me.state == nachbar.Profile.States.LOGGED) {
-    nachbar.socket.emit("update position", nachbar.me.location.latitude, nachbar.me.location.longtitude)
+  if (nachbar.me.state == nachbar.Profile.States.ONLINE) {
+    nachbar.socket.emit("update position", nachbar.me.location.latitude, nachbar.me.location.longitude)
   }
   else if (nachbar.me.state == nachbar.Profile.States.CONNECTED) {
-    nachbar.socket.emit("get nearbys", nachbar.me.location.latitude, nachbar.me.location.longtitude, function(data) {
-      //update persones model & view
+    nachbar.socket.emit("get nearbys", nachbar.me.location.latitude, nachbar.me.location.longitude, function(data) {
+      for (var i = 0; i < data.length; i++) {
+        var marker = new google.maps.Marker({
+          position: new google.maps.LatLng(data[i].location.latitude, data[i].location.longitude),
+          draggable: false,
+          animation: google.maps.Animation.DROP,
+          map: nachbar.map,
+          title: data[i].name
+        });
+      }
     })
   }
 });
 
+// state change
+nachbar.me.bind("login", function() {
+  nachbar.socket.emit("update position", nachbar.me.location.latitude, nachbar.me.location.longitude)
+  nachbar.socket.emit("get nearbys", nachbar.me.location.latitude, nachbar.me.location.longitude, function(data) {
+    for (var i = 0; i < data.length; i++) {
+      var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(data[i].location.latitude, data[i].location.longitude),
+        draggable: false,
+        animation: google.maps.Animation.DROP,
+        map: nachbar.map,
+        title: data[i].name
+      }); 
+    }
+  })
+});
+
 nachbar.socket.on('connect', function () {
   nachbar.me.updateState(nachbar.Profile.States.CONNECTED);
+
+  if (nachbar.me.isLocated()) {
+    nachbar.socket.emit("get nearbys", nachbar.me.location.latitude, nachbar.me.location.longitude, function(data) {
+      for (var i = 0; i < data.length; i++) {
+        var marker = new google.maps.Marker({
+          position: new google.maps.LatLng(data[i].location.latitude, data[i].location.longitude),
+          draggable: false,
+          animation: google.maps.Animation.DROP,
+          map: nachbar.map,
+          title: data[i].name
+        }); 
+      }
+    })
+  }
+
   //following code should be moved elsewhere
   nachbar.view.message('System', 'You have been connected to server.');
 });
@@ -63,11 +102,8 @@ nachbar.socket.on('nicknames', function (nicknames) {
   }
 });
 
-nachbar.socket.on('reconnect', function () {
-  nachbar.view.message('System', 'Reconnected to the server');
-});
-
 nachbar.socket.on('reconnecting', function () {
+  nachbar.me.updateState(nachbar.Profile.States.RECONNECTING);
   nachbar.view.message('System', 'Attempting to re-connect to the server');
 });
 

@@ -50,15 +50,12 @@
       allFields.removeClass "ui-state-error"
 
       bValid = checkLength(e_nickname, "nickname", 3, 16)
-      bValid = bValid && checkRegexp(e_nickname, /\^[a\-z]\([0\-9a\-z_]\)\+$/i, "Username may consist of a-z, 0-9, underscores, begin with a letter." )
-
       return if !bValid
 
       name = e_nickname.val()
-      nachbar.socket.emit 'nickname', name, (set) =>
-        if !set
-          nachbar.me.name = name
-          $("#nickname").dialog("close")
-        else
-          updateTips("Nickname already in use")
+      nachbar.socket.emit 'nickname', name
+      nachbar.me.name = name
+      nachbar.me.updateState(nachbar.Profile.States.ONLINE)
+
+      $("#nickname").dialog("close")
 

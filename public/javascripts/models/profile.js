@@ -15,31 +15,45 @@ nachbar.Profile = Backbone.Model.extend({
 
   //location
   ,location: {
-    latitude    :  0
-   ,longtitude  :  0
+    latitude    :  10000
+   ,longitude  :  10000
+  }
+
+  ,isLocated: function() {
+    return this.location.latitude < 360 && this.location.longitude < 360
   }
 
   // update user state
-  ,updateState: function(val) {
-    this.set({state: val})
+  ,updateState: function(new_state) {
+    var old_state = this.state;
+    this.state =  new_state;
+
+    if (old_state == nachbar.Profile.States.CONNECTED
+     && new_state == nachbar.Profile.States.ONLINE) {
+      this.trigger("login");
+    } else if (old_state == nachbar.Profile.States.RECONNECTING
+     && new_state == nachbar.Profile.States.CONNECTED) {
+      this.trigger("reconnect");
+    }
   }
 
   // update location
   ,updateLocation: function(lat, lng) {
     this.location.latitude = lat;
-    this.location.longtitude = lng;
+    this.location.longitude = lng;
     this.trigger("change:location");
   }
 
   //get google location object
   ,gLocation: function() {
-    return new google.maps.LatLng(this.location.latitude, this.location.longtitude);
+    return new google.maps.LatLng(this.location.latitude, this.location.longitude);
   }
 
 }, {//class properties
   States: {
     DISCONNECTED : 0
    ,CONNECTED    : 1
-   ,LOGGED       : 2
+   ,RECONNECTING : 2
+   ,ONLINE       : 3
   }
 })

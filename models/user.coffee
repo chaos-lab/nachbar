@@ -6,6 +6,7 @@ UserSchema = new Schema({
   sex         : Number,
   signature   : String,
   birthday    : Date,
+  online      : { type: Number, default: 0 }
   vision      : { type: Number, default: nachbar.config.user.default_vision },
   hearing     : { type: Number, default: nachbar.config.user.default_vision },
   location    : {
@@ -22,9 +23,6 @@ exports = module.exports = User
 # user's connection channel
 User::socket = null
 
-# stores (user name, user) pair
-User.collections = {}
-
 # add a user, store it in DB & memory
 User.add = (name, socket) ->
   user = new User()
@@ -32,18 +30,17 @@ User.add = (name, socket) ->
   user.socket = socket
   socket.user = user
   user.save()
-  User.collections[name] = user
+  return user
 
 # update user profile, except name
 User::updateLocation = (lat, long) ->
   @location.latitude = lat
-  @location.longtitude = long
+  @location.longitude = long
   this.save()
 
 
 # return an array of user names
-User.names = ->
-  nicknames = []
-  nicknames.unshift name for name, user of User.collections
-  return nicknames
+User.names = (callback)->
+  User.find {online: 1}, ["name"], (err, docs) ->
+    callback(docs)
 

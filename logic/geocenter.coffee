@@ -10,15 +10,19 @@ module.exports = geocenter = {}
 #
 #
 
-geocenter.getNearbys = (latitude, longtitude, vision, callback) ->
-  query = new Query
+geocenter.getNearbys = (latitude, longitude, callback) ->
+
+  #nachbar.User.find { location : { $near : [latitude, longitude], $maxDistance : 1 }, online: 1 }, (err, docs) ->
+  query = nachbar.User.find({})
   query.select('name', 'location')
-  #query.where('gps').wherein.center({center: [5, 25], radius: 5})
-  .where('checkin').near(latitude, longtitude).maxDistance(vision)
+  #.where({ online: 1})
+  .where('location').near(latitude, longitude).maxDistance(1)
+  .limit(50)
   .run (err, docs) ->
+    console.log("error:#{err}")
+    console.log("docs:#{docs}")
     if docs
-      return docs
+     callback(docs)
     else
-      return {}
-    
- 
+     callback({})
+

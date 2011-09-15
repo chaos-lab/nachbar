@@ -13,15 +13,16 @@ The basic scenario is as following:
 Following technologies are used in the project:
 
   - node.js
+  - express
   - mongodb
   - mongoose
   - coffee-script
-  - express
   - jade
+  - backbone.js
+  - socket.io
   - jquery
   - jquery-ui
-  - socket.io
-  - backbone.js
+  - blueprint
 
 # How to run
 

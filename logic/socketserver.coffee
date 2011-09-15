@@ -6,6 +6,10 @@ mongoose.connect('mongodb://localhost/nachbar')
 
 #models
 User = require('../models/user')
+nachbar.User = User
+
+#geocenter
+nachbar.geocenter = require('./geocenter')
 
 module.exports = socketServer = {}
 
@@ -20,36 +24,35 @@ socketServer.start = (app) ->
       socket.close if !socket.user
       socket.broadcast.emit('user message', socket.user.name, msg)
 
-    socket.on 'get nearbys', (latitude, longtitude, fn) ->
+    socket.on 'get nearbys', (latitude, longitude, fn) ->
+      console.log("lat:#{latitude}, long:#{longitude}")
       # send a list of users to client
-      nachbar.geocenter.getNearbys latitude, longtitude, (data) ->
+      nachbar.geocenter.getNearbys latitude, longitude, (data) ->
         fn(data)
 
     # set position
-    socket.on 'update position', (latitude, longtitude) ->
+    socket.on 'update position', (latitude, longitude) ->
       return if !socket.user
-      socket.user.updateLocation(parseFloat(latitude), parseFloat(longtitude))
+      socket.user.updateLocation(latitude, longitude)
 
     # set nickname event
     socket.on 'nickname', (nick, fn) ->
-      # name already used
-      if User.collections[nick]
-         fn(true)
-         return
-
-      fn(false)
       User.add(nick, socket)
 
       socket.broadcast.emit('announcement', nick + ' connected')
-      io.sockets.emit('nicknames', User.names())
+      User.names (names) ->
+        io.sockets.emit('nicknames', names)
 
     # disconnect event
     socket.on 'disconnect', ->
       return if !socket.user
 
-      # delete user from data store
-      delete User.collections[socket.user.name]
+      #socket.user.online = 0
+      #socket.user.save()
+      socket.user.remove()
 
       socket.broadcast.emit('announcement', socket.user.name + ' disconnected')
-      io.sockets.emit('nicknames', User.names())
+
+      User.names (names) ->
+        io.sockets.emit('nicknames', names)
 
