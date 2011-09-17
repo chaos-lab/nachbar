@@ -43,7 +43,8 @@
       submit()
       return false
 
-    $("#set-nickname #submit").click submit
+    $("#set-nickname #submit").click ->
+      $("#set-nickname").submit()
 
     submit = ->
       bValid = true

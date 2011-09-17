@@ -7,8 +7,9 @@ nachbar.socket = io.connect();
 nachbar.view = nachbar.view || {};
 
 nachbar.me = new nachbar.Profile;
+nachbar.nearbys = new nachbar.UserCollection;
 
-// update map marker
+// ap marker
 nachbar.me.bind("change:location", function() {
   if (!nachbar.me.marker) {
     var marker = new google.maps.Marker({
@@ -23,12 +24,21 @@ nachbar.me.bind("change:location", function() {
     var infowindow = new google.maps.InfoWindow({
       content: "It's you! Drag to move your location."
     });
+
     google.maps.event.addListener(marker, 'mouseover', function() {
+      infowindow.content =  "It's you! Drag to move.<br/>[" + nachbar.me.location.latitude + "," + nachbar.me.location.longitude + "]";
       infowindow.open(nachbar.map, marker);
     })
+
     google.maps.event.addListener(marker, 'mouseout', function() {
       infowindow.close();
     })
+
+    google.maps.event.addListener(marker, 'dragend', function() {
+      var cur_pos = marker.getPosition();
+      nachbar.me.updateLocation(cur_pos.lat(), cur_pos.lng());
+    });
+
   } else {
     nachbar.me.marker.setPosition(nachbar.me.gLocation());
   }
@@ -39,53 +49,75 @@ nachbar.me.bind("change:location", function() {
   if (nachbar.me.state == nachbar.Profile.States.ONLINE) {
     nachbar.socket.emit("update position", nachbar.me.location.latitude, nachbar.me.location.longitude)
   }
-  else if (nachbar.me.state == nachbar.Profile.States.CONNECTED) {
-    nachbar.socket.emit("get nearbys", nachbar.me.location.latitude, nachbar.me.location.longitude, function(data) {
-      for (var i = 0; i < data.length; i++) {
-        var marker = new google.maps.Marker({
-          position: new google.maps.LatLng(data[i].location.latitude, data[i].location.longitude),
-          draggable: false,
-          animation: google.maps.Animation.DROP,
-          map: nachbar.map,
-          title: data[i].name
-        });
-      }
-    })
-  }
+  nachbar.updateNearbys();
 });
+
+// update nearbys from server
+nachbar.updateNearbys = function() {
+  nachbar.socket.emit("get nearbys", nachbar.me.location.latitude, nachbar.me.location.longitude, function(collection) {
+    _.each(collection, function(item) {
+      nachbar.updateUser(item);
+    })
+  })
+}
+
+nachbar.updateUser = function(info) {
+  if (info.name == nachbar.me.name) return;
+
+  // if the user already added, only update info
+  user = nachbar.nearbys.get(info._id);
+  if (user) {
+     user.updateLocation(info.location.latitude, info.location.longitude);
+     return;
+  }
+  
+  // create model for new user
+  user = new nachbar.User;
+  user.id = info._id;
+  user.name = info.name;
+  user.location.latitude = info.location.latitude;
+  user.longitude = info.location.longitude;
+  nachbar.nearbys.add(user);
+
+  // add marker for new user
+  var marker = new google.maps.Marker({
+    position: user.gLocation(),
+    draggable: false,
+    animation: google.maps.Animation.DROP,
+    map: nachbar.map,
+    title: user.name,
+    icon: "http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png"
+  });
+  user.marker = marker;
+
+  var infowindow = new google.maps.InfoWindow({
+    content: "Name: " + user.name
+  });
+
+  google.maps.event.addListener(marker, 'mouseover', function() {
+    infowindow.content =  user.name + "<br/>[" + user.location.latitude + "," + user.location.longitude + "]";
+    infowindow.open(nachbar.map, marker);
+  })
+
+  google.maps.event.addListener(marker, 'mouseout', function() {
+    infowindow.close();
+  })
+
+  user.bind("change:location", function() {
+    user.marker.setPosition(user.gLocation());
+  })
+}
 
 // state change
 nachbar.me.bind("login", function() {
   nachbar.socket.emit("update position", nachbar.me.location.latitude, nachbar.me.location.longitude)
-  nachbar.socket.emit("get nearbys", nachbar.me.location.latitude, nachbar.me.location.longitude, function(data) {
-    for (var i = 0; i < data.length; i++) {
-      var marker = new google.maps.Marker({
-        position: new google.maps.LatLng(data[i].location.latitude, data[i].location.longitude),
-        draggable: false,
-        animation: google.maps.Animation.DROP,
-        map: nachbar.map,
-        title: data[i].name
-      }); 
-    }
-  })
+  nachbar.updateNearbys();
 });
 
 nachbar.socket.on('connect', function () {
   nachbar.me.updateState(nachbar.Profile.States.CONNECTED);
 
-  if (nachbar.me.isLocated()) {
-    nachbar.socket.emit("get nearbys", nachbar.me.location.latitude, nachbar.me.location.longitude, function(data) {
-      for (var i = 0; i < data.length; i++) {
-        var marker = new google.maps.Marker({
-          position: new google.maps.LatLng(data[i].location.latitude, data[i].location.longitude),
-          draggable: false,
-          animation: google.maps.Animation.DROP,
-          map: nachbar.map,
-          title: data[i].name
-        }); 
-      }
-    })
-  }
+  if (nachbar.me.isLocated()) nachbar.updateNearbys();
 
   //following code should be moved elsewhere
   nachbar.view.message('System', 'You have been connected to server.');
@@ -113,5 +145,9 @@ nachbar.socket.on('error', function (e) {
 
 nachbar.socket.on('user message', function(from, msg) {
   nachbar.view.message(from, msg);
+})
+
+nachbar.socket.on('user relocated', function(user) {
+  nachbar.updateUser(user); 
 })
 

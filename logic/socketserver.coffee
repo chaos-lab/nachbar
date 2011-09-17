@@ -34,6 +34,7 @@ socketServer.start = (app) ->
     socket.on 'update position', (latitude, longitude) ->
       return if !socket.user
       socket.user.updateLocation(latitude, longitude)
+      socket.broadcast.emit('user relocated', socket.user)
 
     # set nickname event
     socket.on 'nickname', (nick, fn) ->
