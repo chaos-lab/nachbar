@@ -1,13 +1,13 @@
 global.nachbar = {}
 
+# config
+nachbar.config = require('./utils/config')
+
 # models
 nachbar.User = require('./models/user')
 
-# geocenter
-nachbar.geocenter = require('./geocenter')
-
-# config
-nachbar.config = require('./utils/config')
+# logic
+nachbar.geocenter = require('./logic/geocenter')
 
 # app
 webapp = require('./logic/webserver')

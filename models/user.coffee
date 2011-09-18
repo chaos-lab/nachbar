@@ -1,19 +1,17 @@
 mongoose = require('mongoose')
 Schema = mongoose.Schema
 
-UserSchema = new Schema({
-  name        : { type: String, required: true, index: true },
-  sex         : Number,
-  signature   : String,
-  birthday    : Date,
+UserSchema = new Schema
+  name        : { type: String, required: true, index: true }
+  sex         : Number
+  signature   : String
+  birthday    : Date
   online      : { type: Number, default: 0 }
-  vision      : { type: Number, default: nachbar.config.user.default_vision },
-  hearing     : { type: Number, default: nachbar.config.user.default_vision },
-  location    : {
-    latitude    : {type: Number},
+  vision      : { type: Number, default: 1 }
+  hearing     : { type: Number, default: 1 }
+  location    : 
+    latitude    : {type: Number}
     longitude   : {type: Number}
-  }
-})
 
 UserSchema.index({location : "2d"})
 
