@@ -19,14 +19,12 @@ nachbar.me.bind("change:location", function() {
       map: nachbar.map,
       title: "It's you!"
     });
-    nachbar.me.marker = marker;
 
     var infowindow = new google.maps.InfoWindow({
       content: "It's you! Drag to move your location."
     });
 
     google.maps.event.addListener(marker, 'mouseover', function() {
-      infowindow.content =  "It's you! Drag to move.<br/>[" + nachbar.me.location.latitude + "," + nachbar.me.location.longitude + "]";
       infowindow.open(nachbar.map, marker);
     })
 
@@ -38,6 +36,9 @@ nachbar.me.bind("change:location", function() {
       var cur_pos = marker.getPosition();
       nachbar.me.updateLocation(cur_pos.lat(), cur_pos.lng());
     });
+
+    nachbar.me.marker = marker;
+    nachbar.me.window = infowindow;
 
   } else {
     nachbar.me.marker.setPosition(nachbar.me.gLocation());
@@ -74,9 +75,10 @@ nachbar.updateUser = function(info) {
   // create model for new user
   user = new nachbar.User;
   user.id = info._id;
+  user.state = nachbar.User.States.ONLINE;
   user.name = info.name;
   user.location.latitude = info.location.latitude;
-  user.longitude = info.location.longitude;
+  user.location.longitude = info.location.longitude;
   nachbar.nearbys.add(user);
 
   // add marker for new user
@@ -88,20 +90,21 @@ nachbar.updateUser = function(info) {
     title: user.name,
     icon: "http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png"
   });
-  user.marker = marker;
 
   var infowindow = new google.maps.InfoWindow({
     content: "Name: " + user.name
   });
 
   google.maps.event.addListener(marker, 'mouseover', function() {
-    infowindow.content =  user.name + "<br/>[" + user.location.latitude + "," + user.location.longitude + "]";
     infowindow.open(nachbar.map, marker);
   })
 
   google.maps.event.addListener(marker, 'mouseout', function() {
     infowindow.close();
   })
+
+  user.marker = marker;
+  user.window = infowindow;
 
   user.bind("change:location", function() {
     user.marker.setPosition(user.gLocation());
@@ -128,10 +131,6 @@ nachbar.socket.on('connect', function () {
   nachbar.view.message('System', 'You have been connected to server.');
 });
 
-nachbar.socket.on('announcement', function (msg) {
-  nachbar.view.message("", "<em>" + msg + "</em>");
-});
-
 nachbar.socket.on('nicknames', function (nicknames) {
   $('#nicknames').empty().append($('<span>Online: </span>'));
   for (var i = 0; i < nicknames.length; i++) {
@@ -149,7 +148,8 @@ nachbar.socket.on('error', function (e) {
 });
 
 nachbar.socket.on('user message', function(from, msg) {
-  nachbar.view.message(from, msg);
+  var u = nachbar.nearbys.get(from);
+  if (u) u.broadcast(msg);
 })
 
 nachbar.socket.on('user relocated', function(user) {
@@ -159,5 +159,7 @@ nachbar.socket.on('user relocated', function(user) {
 nachbar.socket.on('user offline', function(user) {
   var u = nachbar.nearbys.get(user._id);
   if (u) u.updateState(nachbar.User.States.OFFLINE);
+
+  nachbar.view.message("", "<em>" + u.name + " offline.</em>");
 })
 

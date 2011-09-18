@@ -9,7 +9,7 @@ UserSchema = new Schema
   online      : { type: Number, default: 0 }
   vision      : { type: Number, default: 1 }
   hearing     : { type: Number, default: 1 }
-  location    : 
+  location    :
     latitude    : {type: Number}
     longitude   : {type: Number}
 
@@ -28,7 +28,6 @@ User.add = (name, socket) ->
   user.socket = socket
   socket.user = user
   user.save()
-  # user.save (err, doc) -> user._id = doc._id
   return user
 
 # update user profile, except name

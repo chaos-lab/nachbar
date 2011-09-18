@@ -34,8 +34,7 @@ script
         })
         return false;
       } else {
-        nachbar.view.message('me', $('#message').val());
-        nachbar.socket.emit('user message', $('#message').val());
+        nachbar.me.broadcast($('#message').val());
         $('#message').val('').focus();
         return false;
       }

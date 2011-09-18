@@ -48,6 +48,17 @@ nachbar.User = Backbone.Model.extend({
     return new google.maps.LatLng(this.location.latitude, this.location.longitude);
   }
 
+  //broadcast
+  ,broadcast: function(msg) {
+    nachbar.view.message(this.name, msg);
+
+    this.window.content =  this.name + "[" + this.location.latitude + "," + this.location.longitude + "] said:<br/>" + msg;
+    this.window.open(nachbar.map, this.marker);
+    var window = this.window;
+    setTimeout(function(){ window.close();}, 2000);
+  }
+
+
 }, {//class properties
   States: {
     OFFLINE  : 0

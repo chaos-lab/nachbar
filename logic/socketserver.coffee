@@ -15,7 +15,7 @@ socketServer.start = (app) ->
     socket.on 'user message', (msg) ->
       # only user with a nickname can speak
       socket.close if !socket.user
-      socket.broadcast.emit('user message', socket.user.name, msg)
+      socket.broadcast.emit('user message', socket.user._id, msg)
 
     socket.on 'get nearbys', (latitude, longitude, fn) ->
       console.log("lat:#{latitude}, long:#{longitude}")
