@@ -4,13 +4,6 @@ sio = require('socket.io')
 mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost/nachbar')
 
-#models
-User = require('../models/user')
-nachbar.User = User
-
-#geocenter
-nachbar.geocenter = require('./geocenter')
-
 module.exports = socketServer = {}
 
 socketServer.start = (app) ->
@@ -38,11 +31,8 @@ socketServer.start = (app) ->
 
     # set nickname event
     socket.on 'nickname', (nick, fn) ->
-      User.add(nick, socket)
-
-      socket.broadcast.emit('announcement', nick + ' connected')
-      User.names (names) ->
-        io.sockets.emit('nicknames', names)
+      user = nachbar.User.add(nick, socket)
+      fn(user._id)
 
     # disconnect event
     socket.on 'disconnect', ->
@@ -52,8 +42,5 @@ socketServer.start = (app) ->
       #socket.user.save()
       socket.user.remove()
 
-      socket.broadcast.emit('announcement', socket.user.name + ' disconnected')
-
-      User.names (names) ->
-        io.sockets.emit('nicknames', names)
+      socket.broadcast.emit('user offline', socket.user)
 

@@ -1,9 +1,18 @@
 global.nachbar = {}
 
-nachbar.config = require('./utils/config')
-nachbar.webapp = require('./logic/webserver')
-nachbar.sockapp = require('./logic/socketserver')
+# models
+nachbar.User = require('./models/user')
 
-nachbar.webapp.start()
-nachbar.sockapp.start(nachbar.webapp)
+# geocenter
+nachbar.geocenter = require('./geocenter')
+
+# config
+nachbar.config = require('./utils/config')
+
+# app
+webapp = require('./logic/webserver')
+sockapp = require('./logic/socketserver')
+
+webapp.start()
+sockapp.start(webapp)
 

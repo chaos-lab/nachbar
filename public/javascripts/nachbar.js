@@ -62,7 +62,7 @@ nachbar.updateNearbys = function() {
 }
 
 nachbar.updateUser = function(info) {
-  if (info.name == nachbar.me.name) return;
+  if (info._id == nachbar.me.id) return;
 
   // if the user already added, only update info
   user = nachbar.nearbys.get(info._id);
@@ -105,6 +105,11 @@ nachbar.updateUser = function(info) {
 
   user.bind("change:location", function() {
     user.marker.setPosition(user.gLocation());
+  })
+
+  user.bind("offline", function() {
+    user.marker.setVisible(false);
+    nachbar.nearbys.remove(user);
   })
 }
 
@@ -149,5 +154,10 @@ nachbar.socket.on('user message', function(from, msg) {
 
 nachbar.socket.on('user relocated', function(user) {
   nachbar.updateUser(user); 
+})
+
+nachbar.socket.on('user offline', function(user) {
+  var u = nachbar.nearbys.get(user._id);
+  if (u) u.updateState(nachbar.User.States.OFFLINE);
 })
 

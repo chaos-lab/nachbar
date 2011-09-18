@@ -30,6 +30,7 @@ User.add = (name, socket) ->
   user.socket = socket
   socket.user = user
   user.save()
+  # user.save (err, doc) -> user._id = doc._id
   return user
 
 # update user profile, except name

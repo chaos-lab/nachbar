@@ -54,9 +54,10 @@
       return if !bValid
 
       name = e_nickname.val()
-      nachbar.socket.emit 'nickname', name
-      nachbar.me.name = name
-      nachbar.me.updateState(nachbar.Profile.States.ONLINE)
+      nachbar.socket.emit 'nickname', name, (id)->
+        nachbar.me.id = id
+        nachbar.me.name = name
+        nachbar.me.updateState(nachbar.Profile.States.ONLINE)
 
-      $("#nickname").dialog("close")
+        $("#nickname").dialog("close")
 
