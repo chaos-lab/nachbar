@@ -52,6 +52,8 @@ Then, install packages
 
     npm install
 
+Next, make sure your mongodb is running.
+
 Now run and have a cup of coffee:-)
 
     coffee nachbar.coffee
