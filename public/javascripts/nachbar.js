@@ -92,7 +92,7 @@ nachbar.updateUser = function(info) {
   });
 
   var infowindow = new google.maps.InfoWindow({
-    content: "Name: " + user.name
+    content: "<strong>" + user.name + "</strong>"
   });
 
   google.maps.event.addListener(marker, 'mouseover', function() {
