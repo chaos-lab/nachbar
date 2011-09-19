@@ -9,6 +9,5 @@
       , "socket.io": "0.8.4"
       , "mongoose": "2.1.2"
       , "coffee-script": "1.1.2"
-      , "now": "0.7.5"
     }
 }
