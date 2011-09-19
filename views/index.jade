@@ -35,7 +35,7 @@ script
         return false;
       } else {
         var msg = $('#message').val();
-        if (!(/\S/).test(msg)) return false;
+        if (!(/\\S/).test(msg)) return false;
 
         nachbar.me.broadcast(msg);
         $('#message').val('').focus();
