@@ -8,6 +8,8 @@ The basic scenario is as following:
   - The client(browser or app) displays the nearbys on a map or as a list.
   - User A sends private message to one nearby B, or broadcasts a message so that all nearbys can receive it.
 
+  Online demo: http://nachbar.no.de
+
 # Technology
 
 Following technologies are used in the project:
