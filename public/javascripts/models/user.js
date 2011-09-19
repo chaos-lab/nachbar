@@ -52,7 +52,8 @@ nachbar.User = Backbone.Model.extend({
   ,broadcast: function(msg) {
     nachbar.view.message(this.name, msg);
 
-    this.window.content =  this.name + "[" + this.location.latitude + "," + this.location.longitude + "] said:<br/>" + msg;
+    var dt = new Date;
+    this.window.content =  "<strong>" + this.name + "</strong>    " + dt.toLocaleTimeString() + "<br/>" + msg;
     this.window.open(nachbar.map, this.marker);
     var window = this.window;
     setTimeout(function(){ window.close();}, 2000);

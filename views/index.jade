@@ -34,7 +34,10 @@ script
         })
         return false;
       } else {
-        nachbar.me.broadcast($('#message').val());
+        var msg = $('#message').val();
+        if (!(/\S/).test(msg)) return false;
+
+        nachbar.me.broadcast(msg);
         $('#message').val('').focus();
         return false;
       }

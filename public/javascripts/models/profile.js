@@ -54,7 +54,8 @@ nachbar.Profile = Backbone.Model.extend({
     nachbar.view.message('me', msg);
     nachbar.socket.emit('user message', msg);
 
-    this.window.content =  "You[" + nachbar.me.location.latitude + "," + nachbar.me.location.longitude + "] said:<br/>" + msg;
+    var dt = new Date;
+    this.window.content =  "<strong>" + this.name + "</strong>     " + dt.toLocaleTimeString() + "<br/>" + msg;
     this.window.open(nachbar.map, this.marker);
     var window = this.window;
     setTimeout(function(){ window.close();}, 2000);
