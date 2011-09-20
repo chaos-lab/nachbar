@@ -36,10 +36,6 @@ Second, install [npm](http://npmjs.org/)
 
     curl http://npmjs.org/install.sh | sh
 
-Third, install [coffee-script](http://jashkenas.github.com/coffee-script/)
-
-    npm install -g coffee-script
-
 Finally, install [mongodb](http://www.mongodb.org/)
 
 ## Source and Packages
@@ -58,7 +54,7 @@ Next, make sure your mongodb is running.
 
 Now run and have a cup of coffee:-)
 
-    coffee nachbar.coffee
+    node server.js
   
 # Thanks
 
