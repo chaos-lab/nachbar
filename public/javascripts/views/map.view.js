@@ -1,0 +1,81 @@
+nachbar.views = nachbar.views || {};
+
+nachbar.views.MapView = Backbone.View.extend({
+  id: "map-area"
+
+  ,tagName: "div"
+
+  ,className: "span-24"
+
+  ,defaultCenter: new google.maps.LatLng(32.060255, 118.796877)
+
+  ,events: {
+  }
+
+  ,initialize: function() {
+    this.render();
+    nachbar.map = this.map = this.createMap();
+    this.getLocation();
+  }
+
+  //render message box using template
+  ,render: function() {
+    $("#map-container").append(this.el);
+  }
+
+  //create map
+  ,createMap: function() {
+    var myOptions = {
+      zoom: 2,
+      center: this.defaultCenter,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    return new google.maps.Map($("#map-area").get(0),  myOptions);
+  }
+
+  //get location
+  ,getLocation: function() {
+    // Try W3C Geolocation (Preferred)
+    var self = this;
+    if(navigator.geolocation) {
+      var browserSupportFlag = true;
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        self.map.setCenter(pos);
+        self.map.setZoom(13);
+        nachbar.me.updateLocation(position.coords.latitude, position.coords.longitude);
+      }, function() {
+        self.handleNoGeolocation(browserSupportFlag);
+      });
+    // Try Google Gears Geolocation
+    } else if (google.gears) {
+      var browserSupportFlag = true;
+      var geo = google.gears.factory.create('beta.geolocation');
+      geo.getCurrentPosition(function(position) {
+        var initialLocation = new google.maps.LatLng(position.latitude, position.longitude);
+        self.map.setCenter(initialLocation);
+        self.map.setZoom(13);
+        nachbar.me.updateLocation(position.coords.latitude, position.coords.longitude);
+      }, function() {
+        self.handleNoGeoLocation(browserSupportFlag);
+      });
+    // Browser doesn't support Geolocation
+    } else {
+      var browserSupportFlag = false;
+      self.handleNoGeolocation(browserSupportFlag);
+    }
+  }
+
+  ,handleNoGeolocation: function(errorFlag) {
+    if (errorFlag == true) {
+      alert("Geolocation service failed.");
+    } else {
+      alert("Your browser doesn't support geolocation.");
+    }
+    nachbar.me.updateLocation(latlng.lat(), latlng.lng());
+    this.map.setZoom(2);
+  }
+
+})
+

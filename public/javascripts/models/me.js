@@ -1,13 +1,8 @@
-var nachbar = nachbar || {};
+nachbar.models = nachbar.models || {};
 
-nachbar.Profile = Backbone.Model.extend({
-  /*
-   *  state definition:
-   *    0 : not connected
-   *    1 : connected
-   *    2 : logged in
-   *
-   * */
+// model of me
+nachbar.models.Me = Backbone.Model.extend({
+  // refer to nachbar.models.Me.States
   state : 0
 
   //name
@@ -28,11 +23,11 @@ nachbar.Profile = Backbone.Model.extend({
     var old_state = this.state;
     this.state =  new_state;
 
-    if (old_state == nachbar.Profile.States.CONNECTED
-     && new_state == nachbar.Profile.States.ONLINE) {
+    if (old_state == nachbar.models.Me.States.CONNECTED
+     && new_state == nachbar.models.Me.States.ONLINE) {
       this.trigger("login");
-    } else if (old_state == nachbar.Profile.States.RECONNECTING
-     && new_state == nachbar.Profile.States.CONNECTED) {
+    } else if (old_state == nachbar.models.Me.States.RECONNECTING
+     && new_state == nachbar.models.Me.States.CONNECTED) {
       this.trigger("reconnect");
     }
   }
@@ -49,17 +44,17 @@ nachbar.Profile = Backbone.Model.extend({
     return new google.maps.LatLng(this.location.latitude, this.location.longitude);
   }
 
-  //broadcast
-  ,broadcast: function(msg) {
-    nachbar.view.message('me', msg);
-    nachbar.socket.emit('user message', msg);
+  //broadcast method. strategy pattern
+  ,broadcast: null
 
-    var dt = new Date;
-    this.window.content =  "<strong>" + this.name + "</strong>     " + dt.toLocaleTimeString() + "<br/>" + msg;
-    this.window.open(nachbar.map, this.marker);
-    var window = this.window;
-    setTimeout(function(){ window.close();}, 2000);
-  }
+  //speak to someboy
+  ,speak: null
+
+  //login
+  ,login: null
+
+  //logout
+  ,logout: null
 
 }, {//class properties
   States: {

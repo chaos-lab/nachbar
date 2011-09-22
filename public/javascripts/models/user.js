@@ -1,6 +1,7 @@
-var nachbar = nachbar || {};
+nachbar.models = nachbar.models || {};
 
-nachbar.User = Backbone.Model.extend({
+// user model
+nachbar.models.User = Backbone.Model.extend({
   /*
    *  state definition:
    *    0 : offline
@@ -27,11 +28,11 @@ nachbar.User = Backbone.Model.extend({
     var old_state = this.state;
     this.state =  new_state;
 
-    if (old_state == nachbar.User.States.OFFLINE
-     && new_state == nachbar.Profile.States.ONLINE) {
+    if (old_state == nachbar.models.User.States.OFFLINE
+     && new_state == nachbar.models.User.States.ONLINE) {
       this.trigger("online");
-    } else if (old_state == nachbar.User.States.ONLINE
-     && new_state == nachbar.User.States.OFFLINE) {
+    } else if (old_state == nachbar.models.User.States.ONLINE
+     && new_state == nachbar.models.User.States.OFFLINE) {
       this.trigger("offline");
     }
   }
@@ -48,16 +49,8 @@ nachbar.User = Backbone.Model.extend({
     return new google.maps.LatLng(this.location.latitude, this.location.longitude);
   }
 
-  //broadcast
-  ,broadcast: function(msg) {
-    nachbar.view.message(this.name, msg);
-
-    var dt = new Date;
-    this.window.content =  "<strong>" + this.name + "</strong>    " + dt.toLocaleTimeString() + "<br/>" + msg;
-    this.window.open(nachbar.map, this.marker);
-    var window = this.window;
-    setTimeout(function(){ window.close();}, 2000);
-  }
+  //broadcast method. strategy pattern.
+  ,broadcast: null
 
 
 }, {//class properties
@@ -67,6 +60,7 @@ nachbar.User = Backbone.Model.extend({
   }
 })
 
-nachbar.UserCollection = Backbone.Collection.extend({
-  model: nachbar.User
+nachbar.models.UserCollection = Backbone.Collection.extend({
+  model: nachbar.models.User
 })
+
