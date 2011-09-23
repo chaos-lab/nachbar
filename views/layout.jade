@@ -21,10 +21,13 @@ html
     script(src='/javascripts/nachbar.js')
     script(src='/javascripts/models/me.js')
     script(src='/javascripts/models/user.js')
+    script(src='/javascripts/views/view.js')
     script(src='/javascripts/views/map.view.js')
     script(src='/javascripts/views/me.map.view.js')
     script(src='/javascripts/views/user.map.view.js')
     script(src='/javascripts/views/message.box.view.js')
+    script(src='/javascripts/views/navigation.view.js')
+    script(src='/javascripts/controllers/message.boxes.controller.js')
     script(src='/javascripts/controllers/me.controller.js')
     script(src='/javascripts/controllers/nearbys.controller.js')
     script(src='/javascripts/controllers/socket.controller.js')
@@ -44,6 +47,7 @@ html
     #header
       .container.content
         h2 Nachbar!
+        #information-banner
 
     != body
 

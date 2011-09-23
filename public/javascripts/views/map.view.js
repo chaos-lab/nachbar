@@ -14,7 +14,7 @@ nachbar.views.MapView = Backbone.View.extend({
 
   ,initialize: function() {
     this.render();
-    nachbar.map = this.map = this.createMap();
+    this.map = this.createMap();
     this.getLocation();
   }
 
@@ -69,11 +69,11 @@ nachbar.views.MapView = Backbone.View.extend({
 
   ,handleNoGeolocation: function(errorFlag) {
     if (errorFlag == true) {
-      alert("Geolocation service failed.");
+      nachbar.views.showTip("Geolocation service failed. You can move your icon to set your location. ");
     } else {
-      alert("Your browser doesn't support geolocation.");
+      nachbar.views.showTip("Your browser doesn't support geolocation. Please move your icon to set your location. ");
     }
-    nachbar.me.updateLocation(latlng.lat(), latlng.lng());
+    nachbar.me.updateLocation(this.defaultCenter.lat(), this.defaultCenter.lng());
     this.map.setZoom(2);
   }
 

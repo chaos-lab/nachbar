@@ -30,7 +30,7 @@ nachbar.controllers.MeController = Backbone.Model.extend({
       return false;
     }
 
-    nachbar.broadcastMessageView.add('me', msg);
+    nachbar.messageBoxManager.broadcast('me', msg);
     nachbar.socket.emit('user message', msg);
 
     this.view.broadcast(msg);

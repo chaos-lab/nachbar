@@ -39,7 +39,7 @@ nachbar.controllers.NearbysController = Backbone.Model.extend({
 
       //set broadcast. strategy pattern
       user.broadcast = function(msg) {
-        nachbar.broadcastMessageView.add(this.name, msg);
+        nachbar.messageBoxManager.broadcast(this.name, msg);
         this.view.broadcast(msg);
       }
 

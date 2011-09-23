@@ -16,7 +16,7 @@ var nachbar = {
     this.nearbys.controller = new nachbar.controllers.NearbysController;
     
     // create message views
-    this.broadcastMessageView = new nachbar.views.MessageBoxView;
+    this.messageBoxManager = new nachbar.controllers.MessageBoxesController;
 
     // socket.io specific code, remote interface
     this.socket = io.connect();

@@ -1,8 +1,8 @@
 #map-area
   height 400px
 
-#chat-area
-  margin-top 5px
+#information-banner
+  float right
 
 #navigation-area
   display inline-block
@@ -16,6 +16,14 @@
       box-shadow 1px 1px 5px 0 #d0d0d0
       border 1px solid #cccccc
       text-decoration none
+  .navigation-item.selected span
+    background wheat
+    font-weight bold
+    -webkit-transform scale(1.05)
+    -moz-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    transform: scale(1.05);
 
 .message-box
   border 1px solid #cccccc
@@ -31,7 +39,7 @@
       display inline-block
       padding 0 10px
   p:nth-child(even)
-    background #fafafa
+    background #eee
   #lines
     height 300px
     overflow auto
@@ -40,11 +48,6 @@
     border-bottom-right-radius 3px
     border-bottom-left-radius 3px
 
-#editor-area
-  #avatar
-    position absolute
-    vertical-align middle
-    margin-right 10px
 
 #message-form
   padding 0.5em

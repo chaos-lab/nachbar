@@ -3,7 +3,7 @@ nachbar.views = nachbar.views || {};
 nachbar.views.MessageBoxView = Backbone.View.extend({
   tagName: "div"
 
-  ,className: ""
+  ,className: "none"
 
   ,events: {
     "submit #message-form" :  "submit"
@@ -21,6 +21,16 @@ nachbar.views.MessageBoxView = Backbone.View.extend({
     $(this.el).html(this.template(this.options));
   }
 
+  //hide
+  ,hide: function() {
+    $(this.el).addClass("none");
+  }
+
+  //show
+  ,show: function() {
+    $(this.el).removeClass("none");
+  }
+
   //add message
   ,add: function(from, msg) {
     if(!msg) return;
@@ -35,7 +45,7 @@ nachbar.views.MessageBoxView = Backbone.View.extend({
     var msg = this.$('#message').val();
     if (!(/\S/).test(msg)) return false;
 
-    nachbar.me.broadcast(msg);
+    this.trigger("sendmessage", msg);
     this.$('#message').val('').focus();
     return false;
   }

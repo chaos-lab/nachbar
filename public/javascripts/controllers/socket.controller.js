@@ -10,16 +10,16 @@ nachbar.controllers.SocketController = Backbone.Model.extend({
 
       if (nachbar.me.isLocated()) nachbar.nearbys.update();
 
-      nachbar.broadcastMessageView.add('System', 'You have been connected to server.');
+      nachbar.views.showTip('You have been connected to server.', "success");
     });
 
     nachbar.socket.on('reconnecting', function () {
       nachbar.me.updateState(nachbar.models.Me.States.RECONNECTING);
-      nachbar.broadcastMessageView.add('System', 'Attempting to re-connect to the server');
+      nachbar.views.showTip('Attempting to re-connect to the server');
     });
 
     nachbar.socket.on('error', function (e) {
-      nachbar.broadcastMessageView.add('System', e ? e : 'A unknown error occurred');
+      nachbar.views.showTip(e ? e : 'A unknown error occurred', "error");
     });
 
     nachbar.socket.on('user message', function(from, msg) {
@@ -35,7 +35,7 @@ nachbar.controllers.SocketController = Backbone.Model.extend({
       var u = nachbar.nearbys.get(user._id);
       if (u) u.updateState(nachbar.models.User.States.OFFLINE);
 
-      nachbar.broadcastMessageView.add("", "<em>" + user.name + " offline.</em>");
+      nachbar.views.showTip("<em>" + user.name + " offline.</em>");
     })
   }
 
