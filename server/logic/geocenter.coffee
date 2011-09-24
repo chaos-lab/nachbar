@@ -16,7 +16,7 @@ geocenter.getNearbys = (latitude, longitude, callback) ->
   query = nachbar.User.find({})
   query.select('name', 'location')
   .where('online', 1)
-  .where('location').near(latitude, longitude)#.maxDistance(1)
+  .where('location').near(latitude, longitude).maxDistance(1)
   .limit(50)
   .run (err, docs) ->
     docs = docs || {}

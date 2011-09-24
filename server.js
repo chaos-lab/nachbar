@@ -3,17 +3,17 @@ require('coffee-script')
 global.nachbar = {}
 
 // config
-nachbar.config = require('./utils/config')
+nachbar.config = require('./config')
 
 // models
-nachbar.User = require('./models/user')
+nachbar.User = require('./server/models/user')
 
 // logic
-nachbar.geocenter = require('./logic/geocenter')
+nachbar.geocenter = require('./server/logic/geocenter')
 
 // app
-webapp = require('./logic/webserver')
-sockapp = require('./logic/socketserver')
+webapp = require('./server/logic/webserver')
+sockapp = require('./server/logic/socketserver')
 
 webapp.start()
 sockapp.start(webapp)

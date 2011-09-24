@@ -8,10 +8,11 @@ module.exports = app = express.createServer()
 app.configure ->
   app.use stylus.middleware
      src: __dirname + '/../views'
-     dest: __dirname + '/../public'
+     dest: __dirname + '/../../public'
      compile: (str, path) ->  stylus(str).set('filename', path)
 
-  app.use(express.static(__dirname + '/../public'))
+  app.use(express.static(__dirname + '/../../public'))
+  app.use(express.static(__dirname + '/../../client'))
 
   app.set('views', __dirname + '/../views')
   app.set('view engine', 'jade')

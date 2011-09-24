@@ -6,6 +6,8 @@ mongoose.connect('mongodb://localhost/nachbar')
 
 module.exports = socketServer = {}
 
+socketServer.socketsMap = {}
+
 socketServer.start = (app) ->
   # Socket.IO server
   io = sio.listen(app)
@@ -21,6 +23,8 @@ socketServer.start = (app) ->
       console.log("lat:#{latitude}, long:#{longitude}")
       # send a list of users to client
       nachbar.geocenter.getNearbys latitude, longitude, (data) ->
+        console.log("nearbys:#{data}")
+        # send a list of users to client
         fn(data)
 
     # set position
@@ -31,8 +35,14 @@ socketServer.start = (app) ->
 
     # set nickname event
     socket.on 'nickname', (nick, fn) ->
-      user = nachbar.User.add(nick, socket)
-      fn(user._id)
+      socket.user = nachbar.User.add(nick)
+      socketServer.socketsMap[socket.user._id] = socket
+      fn(socket.user._id)
+
+    # private message
+    socket.on 'private message', (to, msg) ->
+      return if !socket.user
+      socketServer.socketsMap[to].emit('private message', socket.user, msg)
 
     # disconnect event
     socket.on 'disconnect', ->

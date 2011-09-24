@@ -10,8 +10,8 @@ UserSchema = new Schema
   vision      : { type: Number, default: 1 }
   hearing     : { type: Number, default: 1 }
   location    :
-    latitude    : {type: Number}
     longitude   : {type: Number}
+    latitude    : {type: Number}
 
 UserSchema.index({location : "2d"})
 
@@ -22,23 +22,17 @@ exports = module.exports = User
 User::socket = null
 
 # add a user, store it in DB & memory
-User.add = (name, socket) ->
+User.add = (name) ->
   user = new User()
   user.name =  name
-  user.socket = socket
-  socket.user = user
+  user.online = 1
   user.save()
   return user
 
-# update user profile, except name
+# update user location, except name
 User::updateLocation = (lat, long) ->
   @location.latitude = lat
   @location.longitude = long
   this.save()
 
-
-# return an array of user names
-User.names = (callback)->
-  User.find {online: 1}, ["name"], (err, docs) ->
-    callback(docs)
 
