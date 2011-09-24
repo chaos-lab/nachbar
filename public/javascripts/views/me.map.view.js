@@ -16,6 +16,9 @@ nachbar.views.MeMapView = Backbone.View.extend({
 
     this.model.bind("change:location", this.locationChangedHandler, this);
     this.model.bind("offline", function() { this.marker.setVisible(false); }, this);
+
+    // create marker if it's already located
+    if (this.model.isLocated) this.locationChangedHandler();
   }
 
   //locate changed

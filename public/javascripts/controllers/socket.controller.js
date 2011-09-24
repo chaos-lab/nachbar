@@ -10,7 +10,7 @@ nachbar.controllers.SocketController = Backbone.Model.extend({
 
       if (nachbar.me.isLocated()) nachbar.nearbys.update();
 
-      nachbar.views.showTip('You have been connected to server.', "success");
+      nachbar.views.showTip('You have been connected to server.', "success", 1000);
     });
 
     nachbar.socket.on('reconnecting', function () {

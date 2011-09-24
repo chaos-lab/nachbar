@@ -8,6 +8,7 @@ nachbar.controllers.MeController = Backbone.Model.extend({
     nachbar.me.login = this.login;
 
     nachbar.me.bind("change:location", function() {
+      nachbar.views.showTip("location changed.", "notice", 2000);
       if (nachbar.me.state == nachbar.models.Me.States.ONLINE) {
         nachbar.socket.emit("update position", nachbar.me.location.latitude, nachbar.me.location.longitude);
       }

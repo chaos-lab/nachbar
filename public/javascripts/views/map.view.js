@@ -44,7 +44,10 @@ nachbar.views.MapView = Backbone.View.extend({
         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         self.map.setCenter(pos);
         self.map.setZoom(13);
-        nachbar.me.updateLocation(position.coords.latitude, position.coords.longitude);
+
+        google.maps.event.addListener(self.map, 'tilesloaded', function() {   
+          nachbar.me.updateLocation(position.coords.latitude, position.coords.longitude);
+        })
       }, function() {
         self.handleNoGeolocation(browserSupportFlag);
       });
@@ -56,7 +59,10 @@ nachbar.views.MapView = Backbone.View.extend({
         var initialLocation = new google.maps.LatLng(position.latitude, position.longitude);
         self.map.setCenter(initialLocation);
         self.map.setZoom(13);
-        nachbar.me.updateLocation(position.coords.latitude, position.coords.longitude);
+
+        google.maps.event.addListener(self.map, 'tilesloaded', function() {   
+          nachbar.me.updateLocation(position.coords.latitude, position.coords.longitude);
+        })
       }, function() {
         self.handleNoGeoLocation(browserSupportFlag);
       });
@@ -73,8 +79,12 @@ nachbar.views.MapView = Backbone.View.extend({
     } else {
       nachbar.views.showTip("Your browser doesn't support geolocation. Please move your icon to set your location. ");
     }
-    nachbar.me.updateLocation(this.defaultCenter.lat(), this.defaultCenter.lng());
+
     this.map.setZoom(2);
+    var self = this;
+    google.maps.event.addListener(this.map, 'tilesloaded', function() {   
+      nachbar.me.updateLocation(self.defaultCenter.lat(), self.defaultCenter.lng());
+    })
   }
 
 })

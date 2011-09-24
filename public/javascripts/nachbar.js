@@ -1,13 +1,15 @@
 var nachbar = {
   initialize: function() {
     // put instances directly on nachbar for ease of use
+
+    // create me first
+    this.me = new nachbar.models.Me;
     
     // create map view
     this.mapView = new nachbar.views.MapView;
     this.map = this.mapView.map;
 
-    // create me
-    this.me = new nachbar.models.Me;
+    // view and controller for me
     this.me.view = new nachbar.views.MeMapView({model: this.me, map: nachbar.map});
     this.me.controller = new nachbar.controllers.MeController;
 
