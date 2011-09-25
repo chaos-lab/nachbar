@@ -45,9 +45,7 @@ nachbar.views.MapView = Backbone.View.extend({
         self.map.setCenter(pos);
         self.map.setZoom(13);
 
-        google.maps.event.addListener(self.map, 'tilesloaded', function() {   
-          nachbar.me.updateLocation(position.coords.latitude, position.coords.longitude);
-        })
+        nachbar.me.updateLocation(position.coords.latitude, position.coords.longitude);
       }, function() {
         self.handleNoGeolocation(browserSupportFlag);
       });
@@ -60,9 +58,7 @@ nachbar.views.MapView = Backbone.View.extend({
         self.map.setCenter(initialLocation);
         self.map.setZoom(13);
 
-        google.maps.event.addListener(self.map, 'tilesloaded', function() {   
-          nachbar.me.updateLocation(position.coords.latitude, position.coords.longitude);
-        })
+        nachbar.me.updateLocation(position.coords.latitude, position.coords.longitude);
       }, function() {
         self.handleNoGeoLocation(browserSupportFlag);
       });
@@ -82,9 +78,7 @@ nachbar.views.MapView = Backbone.View.extend({
 
     this.map.setZoom(2);
     var self = this;
-    google.maps.event.addListener(this.map, 'tilesloaded', function() {   
-      nachbar.me.updateLocation(self.defaultCenter.lat(), self.defaultCenter.lng());
-    })
+    nachbar.me.updateLocation(self.defaultCenter.lat(), self.defaultCenter.lng());
   }
 
 })
