@@ -43,7 +43,7 @@ nachbar.views.UserMapView = Backbone.View.extend({
       animation: google.maps.Animation.DROP,
       map: this.map,
       title: this.model.name,
-      icon: "http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png"
+      icon: "/images/blue-dot.png"
     });
   }
 

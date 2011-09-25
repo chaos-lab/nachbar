@@ -58,7 +58,8 @@ nachbar.views.MeMapView = Backbone.View.extend({
       draggable: true,
       animation: google.maps.Animation.DROP,
       map: this.map,
-      title: "It's you!"
+      title: "It's you!",
+      icon: "/images/red-dot.png"
     });
   }
 
