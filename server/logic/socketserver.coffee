@@ -14,10 +14,10 @@ socketServer.start = (app) ->
 
   io.sockets.on 'connection', (socket) ->
     # send message event
-    socket.on 'user message', (msg) ->
+    socket.on 'broadcast', (msg) ->
       # only user with a nickname can speak
       socket.close if !socket.user
-      socket.broadcast.emit('user message', socket.user._id, msg)
+      socket.broadcast.emit('broadcast', socket.user._id, msg)
 
     socket.on 'get nearbys', (latitude, longitude, fn) ->
       console.log("lat:#{latitude}, long:#{longitude}")

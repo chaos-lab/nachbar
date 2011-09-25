@@ -26,6 +26,10 @@ nachbar.views.UserMapView = Backbone.View.extend({
       self.infoWindow.close();
     }) 
 
+    google.maps.event.addListener(this.marker, 'dblclick', function() {
+      self.trigger("dblclick");
+    }) 
+
     this.model.bind("change:location", this.render, this);
     this.model.bind("offline", function() { this.marker.setVisible(false); }, this);
   }
@@ -33,6 +37,16 @@ nachbar.views.UserMapView = Backbone.View.extend({
   //render user on map
   ,render: function() {
     this.marker.setPosition(this.model.gLocation());
+  }
+
+  //bounce
+  ,bounce: function() {
+    this.marker.setAnimation(google.maps.Animation.BOUNCE);
+  }
+
+  //stop bounce
+  ,stopBounce: function() {
+    this.marker.setAnimation(null);
   }
 
   //create marker

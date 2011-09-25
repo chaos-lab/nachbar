@@ -13,6 +13,9 @@ nachbar.models.User = Backbone.Model.extend({
   //name
   ,name : ""
 
+  //pending messages
+  ,pendingMessages: []
+
   //location
   ,location: {
     latitude    :  10000
@@ -51,6 +54,9 @@ nachbar.models.User = Backbone.Model.extend({
 
   //broadcast method. strategy pattern.
   ,broadcast: null
+
+  //speak to me
+  ,speak: null
 
 
 }, {//class properties

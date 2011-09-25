@@ -22,7 +22,7 @@ nachbar.controllers.SocketController = Backbone.Model.extend({
       nachbar.views.showTip(e ? e : 'A unknown error occurred', "error");
     });
 
-    nachbar.socket.on('user message', function(from, msg) {
+    nachbar.socket.on('broadcast', function(from, msg) {
       var u = nachbar.nearbys.get(from);
       if (u) u.broadcast(msg);
     })
@@ -33,9 +33,18 @@ nachbar.controllers.SocketController = Backbone.Model.extend({
 
     nachbar.socket.on('user offline', function(user) {
       var u = nachbar.nearbys.get(user._id);
-      if (u) u.updateState(nachbar.models.User.States.OFFLINE);
+      if (u) { 
+        u.updateState(nachbar.models.User.States.OFFLINE);
+        nachbar.messageBoxManager.removeBox(u.id);
+      }
 
       nachbar.views.showTip("<em>" + user.name + " offline.</em>");
+    })
+
+    nachbar.socket.on('private message', function(user, msg) {
+      nachbar.nearbys.updateUser(user);
+      var u = nachbar.nearbys.get(user._id);
+      if (u) u.speak(msg);
     })
   }
 

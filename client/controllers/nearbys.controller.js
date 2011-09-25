@@ -37,10 +37,46 @@ nachbar.controllers.NearbysController = Backbone.Model.extend({
       // create user view
       user.view = new nachbar.views.UserMapView( { model: user, map: nachbar.map });
 
+      // listen to view events
+      user.view.bind("dblclick", function() {
+        // this --> user
+        var talker = this;
+        if (nachbar.messageBoxManager.existsBox(talker.id)) {
+          nachbar.messageBoxManager.select(talker.id);
+        } else {
+          // create message box
+          var name = "talk with " + talker.name;
+          nachbar.messageBoxManager.createBox(talker.id, name, function(msg) { nachbar.me.speak(talker, msg); });
+          nachbar.messageBoxManager.select(talker.id);
+
+          // write pending messages
+          _.each(talker.pendingMessages, function(item) {
+            nachbar.messageBoxManager.speak(talker.id, talker, item.message, item.time);
+          })
+          talker.pendingMessages = [];
+
+          // stop marker bounce on map if it's bouncing
+          talker.view.stopBounce();
+        }
+
+      }, user)
+
       //set broadcast. strategy pattern
       user.broadcast = function(msg) {
-        nachbar.messageBoxManager.broadcast(this.name, msg);
+        nachbar.messageBoxManager.speak("broadcast", this, msg);
         this.view.broadcast(msg);
+      }
+
+      // user speaks to me, this --> user
+      user.speak = function(msg) {
+        // if the message box is already open, add to box
+        if (nachbar.messageBoxManager.existsBox(this.id)) {
+          nachbar.messageBoxManager.speak(this.id, this, msg);
+        } else {
+          // alert me to create message box
+          this.pendingMessages.unshift({message: msg, time: new Date});
+          this.view.bounce();
+        }
       }
 
       user.bind("offline", function() {

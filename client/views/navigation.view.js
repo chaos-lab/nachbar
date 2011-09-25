@@ -2,7 +2,7 @@ nachbar.views = nachbar.views || {};
 
 nachbar.views.NavigationView = Backbone.View.extend({
 
-  selected: ""
+  selected: "-1"
 
   ,initialize: function() {
     var self = this;
@@ -10,7 +10,7 @@ nachbar.views.NavigationView = Backbone.View.extend({
       self.select($(this).attr("key"));
     })
 
-    this.template = _.template("<div class='navigation-item' key='<%= name%>'><span><%= name%></span></div>");
+    this.template = _.template("<div class='navigation-item' key='<%= key%>'><span><%= name%></span></div>");
   }
 
   //render message box using template
@@ -19,24 +19,54 @@ nachbar.views.NavigationView = Backbone.View.extend({
   }
 
   //add navigation item
-  ,add: function(name) {
+  ,add: function(key, name) {
     if(!name) return this;
 
-    $(this.el).append(this.template({name: name}));
+    $(this.el).append(this.template({key: key, name: name}));
     return this;
   }
 
   //select
-  ,select: function(name) {
-    if (this.$(".navigation-item[key='" + name + "']").length == 0) return this;
-    if (this.selected == name) return this;
+  ,select: function(key) {
+    var item = this.$(".navigation-item[key='" + key + "']");
+    if (item.length == 0) return this;
+    if (this.selected == key) return this;
 
-    this.$(".navigation-item").removeClass("selected");
-    this.$(".navigation-item[key='" + name + "']").addClass("selected");
+    this.$(".navigation-item[key='" + this.selected + "']").removeClass("selected");;
+    item.addClass("selected");
 
-    this.selected = name;
+    this.selected = key;
     this.trigger("selectedChanged");
+
+    if (item.data("animate")) {
+      clearInterval(item.data("animate"));
+      item.removeData("animate");
+    }
+
     return this;
+  }
+
+  //remove
+  ,remove: function(key) {
+    var item = this.$(".navigation-item[key='" + key + "']");
+    if (item.length == 0) return this;
+
+    if (item.data("animate")) {
+      clearInterval(item.data("animate"));
+    }
+
+    item.remove();
+  }
+
+  //highlight
+  ,highlight: function(key) {
+    var item = this.$(".navigation-item[key='" + key + "']");
+    if (item.length == 0) return this;
+    if (this.selected == key) return this;
+
+    var self = this;
+    var timer = setInterval(function() { item.toggleClass("selected"); }, 200);
+    item.data("animate", timer);
   }
 
 })

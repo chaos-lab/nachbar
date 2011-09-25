@@ -32,12 +32,12 @@ nachbar.views.MessageBoxView = Backbone.View.extend({
   }
 
   //add message
-  ,add: function(from, msg) {
+  ,add: function(from, msg, time) {
     if(!msg) return;
 
-    dt = new Date;
+    time = time || new Date;
     msg = msg.replace(/\\n/g, "<br/>");
-    this.$("#lines").prepend($('<p>').append(dt.toLocaleTimeString(), $('<b>').text(from), msg));
+    this.$("#lines").prepend($('<p>').append(time.toLocaleTimeString(), $('<b>').text(from), msg));
   }
 
   //submit message

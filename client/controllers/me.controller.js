@@ -6,6 +6,7 @@ nachbar.controllers.MeController = Backbone.Model.extend({
   initialize: function() {
     nachbar.me.broadcast = this.broadcast;
     nachbar.me.login = this.login;
+    nachbar.me.speak = this.speak;
 
     nachbar.me.bind("change:location", function() {
       nachbar.views.showTip("location changed.", "notice", 2000);
@@ -31,10 +32,24 @@ nachbar.controllers.MeController = Backbone.Model.extend({
       return false;
     }
 
-    nachbar.messageBoxManager.broadcast('me', msg);
-    nachbar.socket.emit('user message', msg);
+    nachbar.messageBoxManager.speak("broadcast", nachbar.me, msg);
+    nachbar.socket.emit('broadcast', msg);
 
     this.view.broadcast(msg);
+  }
+
+  // speak privately to someboy
+  ,speak: function(to, msg) {
+    if (this.state == nachbar.models.Me.States.CONNECTED) {
+      this.login(function() {
+        if (nachbar.me.state == nachbar.models.Me.States.ONLINE) nachbar.me.speak(to, msg);
+      })
+
+      return false;
+    }
+
+    nachbar.messageBoxManager.speak(to.id, nachbar.me, msg);
+    nachbar.socket.emit('private message', to.id, msg);
   }
 
   // nachbar.me instance method, this --> nachbar.me
