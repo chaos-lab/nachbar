@@ -26,6 +26,7 @@ nachbar.views.MeMapView = Backbone.View.extend({
     // only create marker if me is positioned
     if (!this.marker) {
       this.marker = this.createMarker();
+      this.circle = this.createCircle(this.marker);
       this.infoWindow = this.createInfoWindow();
 
       var self = this;
@@ -59,8 +60,24 @@ nachbar.views.MeMapView = Backbone.View.extend({
       animation: google.maps.Animation.DROP,
       map: this.map,
       title: "It's you!",
-      icon: "/images/red-stars.png"
+      icon: "/images/orange-dot.png"
     });
+  }
+
+  //create circle
+  ,createCircle: function(marker) {
+    var options = {
+      strokeColor: "#FF0000",
+      strokeOpacity: 0.8,
+      strokeWeight: 1,
+      fillColor: "#FF0000",
+      fillOpacity: 0.35,
+      radius: 1000
+    };
+
+    circle = new google.maps.Circle(options);
+    circle.bindTo('map', marker, 'map');
+    circle.bindTo('center', marker, 'position');
   }
 
   //create info window
