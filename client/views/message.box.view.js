@@ -7,18 +7,19 @@ nachbar.views.MessageBoxView = Backbone.View.extend({
 
   ,events: {
     "submit #message-form" :  "submit"
+   ,"resize #message-form" :  "resize"
    ,"keyup #message"       :  "keyup"
   }
 
   ,initialize: function() {
-    this.template = _.template($('#message-box-template').html());
     this.render();
-    $("#message-box-wrap").append(this.el);
   }
 
   //render message box using template
   ,render: function() {
+    this.template = _.template($('#message-box-template').html());
     $(this.el).html(this.template(this.options));
+    $("#message-box-wrap").append(this.el);
   }
 
   //hide
@@ -29,6 +30,12 @@ nachbar.views.MessageBoxView = Backbone.View.extend({
   //show
   ,show: function() {
     $(this.el).removeClass("none");
+    this.$("#message-form").trigger("resize");
+  }
+
+  ,resize: function() {
+    var parentWidth = this.$("#message-form").width();
+    this.$("#message-form textarea").css("width", parentWidth - 100 + "px");
   }
 
   //add message

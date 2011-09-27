@@ -76,5 +76,16 @@ nachbar.views.UserMapView = Backbone.View.extend({
     var window = this.infoWindow;
     setTimeout(function(){ window.close();}, 2000);
   }
+
+  //get offset
+  ,offset: function() {
+    // Calculate marker position in pixels form upper left corner
+    var scale = Math.pow(2, this.map.getZoom());
+    var pixelCoordsCenter = this.map.getProjection().fromLatLngToPoint(this.map.getCenter());
+    return {
+      x_offset: Math.floor((pixelCoordsMarker.x - pixelCoordsCenter.x) * scale + $(this.map.getDiv()).width()/2),
+      y_offset: Math.floor((pixelCoordsMarker.y - pixelCoordsCenter.y) * scale + $(this.map.getDiv()).height()/2)
+    }
+  }
 })
 

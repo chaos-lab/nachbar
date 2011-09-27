@@ -4,69 +4,34 @@ nachbar.controllers.MessageBoxesController = Backbone.Model.extend({
 
   initialize: function() {
     // initialize map
-    this.messageBoxMap = {};
-
-    // create navigation
-    this.navigationView = new nachbar.views.NavigationView({ el: $("#navigation-area").get(0) });
-    // bind select change event
-    this.navigationView.bind("selectedChanged", this.selectedChanged, this);
+    this.chatBoxMap = {};
 
     // create broadcast message box
-    this.createBox("broadcast", "broadcast", function(msg) { nachbar.me.broadcast(msg); });
-
-    this.select("broadcast");
+    this.broadcastBox = new nachbar.views.MessageBoxView;
+    this.broadcastBox.bind("sendmessage", function(msg) { nachbar.me.broadcast(msg); })
+    this.broadcastBox.show();
   }
 
-  // select
-  , select: function(key) {
-    this.navigationView.select(key);
+  // whether a chat box exist
+  , existsChatBox: function(key) {
+    return this.chatBoxMap[key];
   }
 
-  // selected
-  , selected: function() {
-    return this.navigationView.selected;
+  // create chat box
+  ,createChatBox: function(key, name, messageHandler) {
+    this.chatBoxMap[key] = new nachbar.views.ChatBoxView({key: key, name: name});
+    if (messageHandler) this.chatBoxMap[key].bind("sendmessage", messageHandler);
+    return this.chatBoxMap[key];
   }
 
-  // whether a message box exist
-  , existsBox: function(key) {
-    return this.messageBoxMap[key];
+  // get chat box
+  ,chatBox: function(key) {
+    return this.chatBoxMap[key];
   }
 
-  // for private use
-  ,createBox: function(key, name, messageHandler) {
-    this.messageBoxMap[key] = new nachbar.views.MessageBoxView;
-    this.navigationView.add(key, name)
-
-    if (messageHandler) this.messageBoxMap[key].bind("sendmessage", messageHandler);
+  ,broadcast: function(from, msg, dt) {
+    this.broadcastBox.add(from.name, msg, dt);
   }
 
-  ,removeBox: function(key) {
-    if (!this.messageBoxMap[key]) return;
-
-    // change selected box
-    if (key == this.selected()) this.select("broadcast");
-
-    this.messageBoxMap[key].remove();
-    this.navigationView.remove(key);
-  }
-
-  ,speak: function(boxID, from, msg, dt) {
-    if (!this.messageBoxMap[boxID]) return;
-
-    this.messageBoxMap[boxID].add(from.name, msg, dt);
-
-    if (this.selected() != boxID) this.navigationView.highlight(boxID);
-  }
-
-  ,selectedChanged: function(e) {
-    var selected = this.navigationView.selected;
-    _.each(this.messageBoxMap, function(val, key) {
-      if (key == selected) {
-        val.show();
-      } else {
-        val.hide();
-      }
-    })
-  }
 })
 

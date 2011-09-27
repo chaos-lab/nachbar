@@ -41,42 +41,45 @@ nachbar.controllers.NearbysController = Backbone.Model.extend({
       user.view.bind("dblclick", function() {
         // this --> user
         var talker = this;
-        if (nachbar.messageBoxManager.existsBox(talker.id)) {
-          nachbar.messageBoxManager.select(talker.id);
+        if (nachbar.messageBoxManager.existsChatBox(talker.id)) {
+          nachbar.messageBoxManager.chatBox(talker.id).show();
         } else {
           // create message box
           var name = "talk with " + talker.name;
-          nachbar.messageBoxManager.createBox(talker.id, name, function(msg) { nachbar.me.speak(talker, msg); });
-          nachbar.messageBoxManager.select(talker.id);
+          var box = nachbar.messageBoxManager.createChatBox(talker.id, name, function(msg) { nachbar.me.chat(talker, msg); });
+          box.show();
 
           // write pending messages
           _.each(talker.pendingMessages, function(item) {
-            nachbar.messageBoxManager.speak(talker.id, talker, item.message, item.time);
+            box.add(talker.name, item.message, item.time);
           })
           talker.pendingMessages = [];
 
-          // stop marker bounce on map if it's bouncing
-          talker.view.stopBounce();
         }
+        // stop marker bounce on map if it's bouncing
+        talker.view.stopBounce();
 
       }, user)
 
       //set broadcast. strategy pattern
       user.broadcast = function(msg) {
-        nachbar.messageBoxManager.speak("broadcast", this, msg);
+        nachbar.messageBoxManager.broadcast(this, msg);
         this.view.broadcast(msg);
       }
 
       // user speaks to me, this --> user
-      user.speak = function(msg) {
+      user.chat = function(msg) {
         // if the message box is already open, add to box
-        if (nachbar.messageBoxManager.existsBox(this.id)) {
-          nachbar.messageBoxManager.speak(this.id, this, msg);
+        var box = nachbar.messageBoxManager.chatBox(this.id);
+        if (box) {
+          box.add(this.name, msg);
         } else {
-          // alert me to create message box
           this.pendingMessages.unshift({message: msg, time: new Date});
-          this.view.bounce();
         }
+
+        // alert user of message arrival
+        if (!box) this.view.bounce();
+        else if (box.isMinimized()) box.highlight();
       }
 
       user.bind("offline", function() {

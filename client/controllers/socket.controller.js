@@ -35,7 +35,8 @@ nachbar.controllers.SocketController = Backbone.Model.extend({
       var u = nachbar.nearbys.get(user._id);
       if (u) { 
         u.updateState(nachbar.models.User.States.OFFLINE);
-        nachbar.messageBoxManager.removeBox(u.id);
+        var box = nachbar.messageBoxManager.chatBox(u.id);
+        if (box) box.add(u.name, "<em>offline</em>");
       }
 
       nachbar.views.showTip("<em>" + user.name + " offline.</em>");
@@ -44,7 +45,7 @@ nachbar.controllers.SocketController = Backbone.Model.extend({
     nachbar.socket.on('private message', function(user, msg) {
       nachbar.nearbys.updateUser(user);
       var u = nachbar.nearbys.get(user._id);
-      if (u) u.speak(msg);
+      if (u) u.chat(msg);
     })
   }
 

@@ -6,3 +6,16 @@
   #message-area
     #lines
 </script>
+
+<script id = "chat-box-template" type = "text/template">
+.ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix
+  span.ui-dialog-title {{ name }}
+  a.ui-dialog-titlebar-close.ui-corner-all
+    span.ui-icon.ui-icon-closethick close
+.ui-dialog-content.ui-widget-content
+  form#message-form
+    textarea#message
+    button Send
+  #message-area
+    #lines
+</script>

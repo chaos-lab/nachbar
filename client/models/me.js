@@ -47,8 +47,8 @@ nachbar.models.Me = Backbone.Model.extend({
   //broadcast method. strategy pattern
   ,broadcast: null
 
-  //speak to someboy
-  ,speak: null
+  //chat with someboy
+  ,chat: null
 
   //login
   ,login: null
