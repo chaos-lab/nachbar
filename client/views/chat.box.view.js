@@ -48,6 +48,10 @@ nachbar.views.ChatBoxView = Backbone.View.extend({
   }
 
   //visible
+  ,isVisible: function() {
+    return !$(this.el).hasClass("none");
+  }
+
   ,isMinimized: function() {
     return this.$(".ui-dialog-content").hasClass("none");
   }

@@ -78,7 +78,7 @@ nachbar.controllers.NearbysController = Backbone.Model.extend({
         }
 
         // alert user of message arrival
-        if (!box) this.view.bounce();
+        if (!box || !box.isVisible()) this.view.bounce();
         else if (box.isMinimized()) box.highlight();
       }
 
