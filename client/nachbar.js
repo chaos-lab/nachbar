@@ -1,9 +1,15 @@
 var nachbar = {
   initialize: function() {
+     // set underscore template
+     _.templateSettings = { interpolate : /\{\{(.+?)\}\}/g };
+
     // put instances directly on nachbar for ease of use
 
     // create me first
     this.me = new nachbar.models.Me;
+
+    // create toolbar
+    this.toolbarView = new nachbar.views.ToolbarView;
     
     // create map view
     this.mapView = new nachbar.views.MapView;

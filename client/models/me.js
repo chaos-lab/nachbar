@@ -14,6 +14,9 @@ nachbar.models.Me = Backbone.Model.extend({
    ,longitude  :  10000
   }
 
+  //broadcast send & receive range, in meters. Assume ( send range == receive range ) for ease of use.
+  ,range: 1000
+
   ,isLocated: function() {
     return this.location.latitude < 360 && this.location.longitude < 360
   }

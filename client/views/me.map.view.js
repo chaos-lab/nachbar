@@ -16,6 +16,7 @@ nachbar.views.MeMapView = Backbone.View.extend({
 
     this.model.bind("change:location", this.locationChangedHandler, this);
     this.model.bind("offline", function() { this.marker.setVisible(false); }, this);
+    this.model.bind("change:range", function() { this.circle.setRadius(this.model.get("range")); }, this);
 
     // create marker if it's already located
     if (this.model.isLocated) this.locationChangedHandler();
@@ -78,6 +79,8 @@ nachbar.views.MeMapView = Backbone.View.extend({
     circle = new google.maps.Circle(options);
     circle.bindTo('map', marker, 'map');
     circle.bindTo('center', marker, 'position');
+
+    return circle;
   }
 
   //create info window

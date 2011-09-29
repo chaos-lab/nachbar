@@ -20,7 +20,6 @@ nachbar.views.ChatBoxView = Backbone.View.extend({
 
   //render message box using template
   ,render: function() {
-    _.templateSettings = { interpolate : /\{\{(.+?)\}\}/g };
     this.template = _.template($('#chat-box-template').html());
 
     $(this.el).html(this.template(this.options));

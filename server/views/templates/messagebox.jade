@@ -1,21 +1,35 @@
-<script id = "message-box-template" type = "text/template">
-.message-box
-  form#message-form
-    textarea#message
-    button Send
-  #message-area
-    #lines
-</script>
+script#message-box-template(type = "text/template")
+  .message-box
+    form#message-form
+      textarea#message
+      button Send
+    #message-area
+      #lines
 
-<script id = "chat-box-template" type = "text/template">
-.ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix
-  span.ui-dialog-title {{ name }}
-  a.ui-dialog-titlebar-close.ui-corner-all
-    span.ui-icon.ui-icon-closethick close
-.ui-dialog-content.ui-widget-content
-  form#message-form
-    textarea#message
-    button Send
-  #message-area
-    #lines
-</script>
+script#chat-box-template(type = "text/template")
+  .ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix
+    span.ui-dialog-title {{ name }}
+    a.ui-dialog-titlebar-close.ui-corner-all
+      span.ui-icon.ui-icon-closethick close
+  .ui-dialog-content.ui-widget-content
+    form#message-form
+      textarea#message
+      button Send
+    #message-area
+      #lines
+
+script#toolbar-template(type = "text/template")
+  #range-set
+    input#range_2(type="radio", name="range", checked="checked", value='100')
+    label(for="range_2") 0.1km
+    input#range_1(type="radio", name="range", checked="checked", value='300')
+    label(for="range_1") 0.3km
+    input#range0(type="radio", name="range", checked="checked", value='500')
+    label(for="range0") 0.5km
+    input#range1(type="radio", name="range", value='2000')
+    label(for="range1") 2km
+    input#range2(type="radio", name="range", value='5000')
+    label(for="range2") 5km
+    input#range3(type="radio", name="range", value='10000')
+    label(for="range3") 10km
+
