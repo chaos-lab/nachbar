@@ -53,7 +53,7 @@
       name = e_nickname.val()
       nachbar.socket.emit 'nickname', name, (id)->
         nachbar.me.id = id
-        nachbar.me.name = name
+        nachbar.me.set({name: name})
         nachbar.me.updateState(nachbar.models.Me.States.ONLINE)
 
         $("#nickname").dialog("close")

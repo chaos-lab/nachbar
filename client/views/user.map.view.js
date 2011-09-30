@@ -1,17 +1,9 @@
 nachbar.views = nachbar.views || {};
 
 nachbar.views.UserMapView = Backbone.View.extend({
-  //marker on map
-  marker: null
-
-  //window
-  ,infoWindow: null
-
-  //map
-  ,map: null
 
   //bind model events
-  ,initialize: function() {
+  initialize: function() {
     this.map = this.options.map;
 
     this.marker = this.createMarker();
@@ -56,7 +48,7 @@ nachbar.views.UserMapView = Backbone.View.extend({
       draggable: false,
       animation: google.maps.Animation.DROP,
       map: this.map,
-      title: this.model.name,
+      title: this.model.get('name'),
       icon: "/images/blue-dot.png"
     });
   }
@@ -64,14 +56,14 @@ nachbar.views.UserMapView = Backbone.View.extend({
   //create info window
   ,createInfoWindow: function() {
     return new google.maps.InfoWindow({
-      content: "<strong>" + this.model.name + "</strong>"
+      content: "<strong>" + this.model.get('name') + "</strong>"
     });
   }
 
   //broadcast
   ,broadcast: function(msg) {
     var dt = new Date;
-    this.infoWindow.content =  "<strong>" + this.model.name + "</strong>    " + dt.toLocaleTimeString() + "<br/>" + msg;
+    this.infoWindow.content =  "<strong>" + this.model.get('name') + "</strong>    " + dt.toLocaleTimeString() + "<br/>" + msg;
     this.infoWindow.open(this.map, this.marker);
     var window = this.infoWindow;
     setTimeout(function(){ window.close();}, 2000);

@@ -36,7 +36,7 @@ nachbar.controllers.SocketController = Backbone.Model.extend({
       if (u) { 
         u.updateState(nachbar.models.User.States.OFFLINE);
         var box = nachbar.messageBoxManager.chatBox(u.id);
-        if (box) box.add(u.name, "<em>offline</em>");
+        if (box) box.add(u.get('name'), "<em>offline</em>");
       }
 
       nachbar.views.showTip("<em>" + user.name + " offline.</em>");

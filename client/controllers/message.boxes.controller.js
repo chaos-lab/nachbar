@@ -30,7 +30,7 @@ nachbar.controllers.MessageBoxesController = Backbone.Model.extend({
   }
 
   ,broadcast: function(from, msg, dt) {
-    this.broadcastBox.add(from.name, msg, dt);
+    this.broadcastBox.add(from.get('name'), msg, dt);
   }
 
 })

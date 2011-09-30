@@ -14,7 +14,7 @@ nachbar.controllers.NearbysController = Backbone.Model.extend({
   //update nearbys, this --> nachbar.nearbys
   ,updateNearbys: function() {
     var self = this;
-    nachbar.socket.emit("get nearbys", nachbar.me.location.latitude, nachbar.me.location.longitude, function(collection) {
+    nachbar.socket.emit("get nearbys", nachbar.me.get('location').latitude, nachbar.me.get('location').longitude, function(collection) {
       _.each(collection, function(item) {
         self.updateUser(item);
       })
@@ -45,13 +45,13 @@ nachbar.controllers.NearbysController = Backbone.Model.extend({
           nachbar.messageBoxManager.chatBox(talker.id).show();
         } else {
           // create message box
-          var name = "talk with " + talker.name;
+          var name = "talk with " + talker.get('name');
           var box = nachbar.messageBoxManager.createChatBox(talker.id, name, function(msg) { nachbar.me.chat(talker, msg); });
           box.show();
 
           // write pending messages
           _.each(talker.pendingMessages, function(item) {
-            box.add(talker.name, item.message, item.time);
+            box.add(talker.get('name'), item.message, item.time);
           })
           talker.pendingMessages = [];
 
@@ -72,8 +72,9 @@ nachbar.controllers.NearbysController = Backbone.Model.extend({
         // if the message box is already open, add to box
         var box = nachbar.messageBoxManager.chatBox(this.id);
         if (box) {
-          box.add(this.name, msg);
+          box.add(this.get('name'), msg);
         } else {
+          if (!this.pendingMessages) this.pendingMessages = [];
           this.pendingMessages.unshift({message: msg, time: new Date});
         }
 
@@ -90,12 +91,12 @@ nachbar.controllers.NearbysController = Backbone.Model.extend({
 
   // create user from json
   ,createUser: function(info) {
-    var user = new nachbar.models.User;
-    user.id = info._id;
-    user.state = nachbar.models.User.States.ONLINE;
-    user.name = info.name;
-    user.location.latitude = info.location.latitude;
-    user.location.longitude = info.location.longitude;
+    var user = new nachbar.models.User({
+      id: info._id
+     ,state: nachbar.models.User.States.ONLINE
+     ,name: info.name
+     ,location: { latitude: info.location.latitude, longitude: info.location.longitude }
+    })
 
     return user;
   }

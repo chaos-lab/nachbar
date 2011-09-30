@@ -1,17 +1,9 @@
 nachbar.views = nachbar.views || {};
 
 nachbar.views.MeMapView = Backbone.View.extend({
-  //marker on map
-  marker: null
-
-  //window
-  ,infoWindow: null
-
-  //map
-  ,map: null
 
   //bind model events
-  ,initialize: function() {
+  initialize: function() {
     this.map = this.options.map;
 
     this.model.bind("change:location", this.locationChangedHandler, this);
@@ -19,7 +11,7 @@ nachbar.views.MeMapView = Backbone.View.extend({
     this.model.bind("change:range", function() { this.circle.setRadius(this.model.get("range")); }, this);
 
     // create marker if it's already located
-    if (this.model.isLocated) this.locationChangedHandler();
+    if (this.model.isLocated()) this.locationChangedHandler();
   }
 
   //locate changed
@@ -73,7 +65,7 @@ nachbar.views.MeMapView = Backbone.View.extend({
       strokeWeight: 1,
       fillColor: "#FF0000",
       fillOpacity: 0.35,
-      radius: 1000
+      radius: this.model.get("range")
     };
 
     circle = new google.maps.Circle(options);
@@ -93,7 +85,7 @@ nachbar.views.MeMapView = Backbone.View.extend({
   //broadcast
   ,broadcast: function(msg) {
     var dt = new Date;
-    this.infoWindow.content =  "<strong>" + this.model.name + "</strong>    " + dt.toLocaleTimeString() + "<br/>" + msg;
+    this.infoWindow.content =  "<strong>" + this.model.get('name') + "</strong>    " + dt.toLocaleTimeString() + "<br/>" + msg;
     this.infoWindow.open(this.map, this.marker);
     var window = this.infoWindow;
     setTimeout(function(){ window.close();}, 2000);

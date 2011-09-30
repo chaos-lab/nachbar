@@ -2,34 +2,17 @@ nachbar.models = nachbar.models || {};
 
 // user model
 nachbar.models.User = Backbone.Model.extend({
-  /*
-   *  state definition:
-   *    0 : offline
-   *    1 : online
-   *
-   * */
-  state : 0
-
-  //name
-  ,name : ""
-
-  //pending messages
-  ,pendingMessages: []
-
-  //location
-  ,location: {
-    latitude    :  10000
-   ,longitude  :  10000
+  initialize: function() {
   }
 
   ,isLocated: function() {
-    return this.location.latitude < 360 && this.location.longitude < 360
+    return this.has('location');
   }
 
   // update user state
   ,updateState: function(new_state) {
-    var old_state = this.state;
-    this.state =  new_state;
+    var old_state = this.get('state');
+    this.set({state:  new_state});
 
     if (old_state == nachbar.models.User.States.OFFLINE
      && new_state == nachbar.models.User.States.ONLINE) {
@@ -42,14 +25,12 @@ nachbar.models.User = Backbone.Model.extend({
 
   // update location
   ,updateLocation: function(lat, lng) {
-    this.location.latitude = lat;
-    this.location.longitude = lng;
-    this.trigger("change:location");
+    this.set({'location': {latitude: lat, longitude: lng}});
   }
 
   //get google location object
   ,gLocation: function() {
-    return new google.maps.LatLng(this.location.latitude, this.location.longitude);
+    return new google.maps.LatLng(this.get('location').latitude, this.get('location').longitude);
   }
 
   //broadcast method. strategy pattern.

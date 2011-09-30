@@ -2,29 +2,26 @@ nachbar.models = nachbar.models || {};
 
 // model of me
 nachbar.models.Me = Backbone.Model.extend({
-  // refer to nachbar.models.Me.States
-  state : 0
 
-  //name
-  ,name : ""
+  initialize: function() {
+    // state
+    this.set({state: 0}, {silent: true});
 
-  //location
-  ,location: {
-    latitude    :  10000
-   ,longitude  :  10000
+    //name
+    this.set({name: ''}, {silent: true});
+
+    //broadcast send & receive range, in meters. Assume ( send range == receive range ) for ease of use.
+    this.set({range: 500}, {silent: true});
   }
 
-  //broadcast send & receive range, in meters. Assume ( send range == receive range ) for ease of use.
-  ,range: 1000
-
   ,isLocated: function() {
-    return this.location.latitude < 360 && this.location.longitude < 360
+    return this.has('location');
   }
 
   // update user state
   ,updateState: function(new_state) {
-    var old_state = this.state;
-    this.state =  new_state;
+    var old_state = this.get('state');
+    this.set({state: new_state});
 
     if (old_state == nachbar.models.Me.States.CONNECTED
      && new_state == nachbar.models.Me.States.ONLINE) {
@@ -37,14 +34,12 @@ nachbar.models.Me = Backbone.Model.extend({
 
   // update location
   ,updateLocation: function(lat, lng) {
-    this.location.latitude = lat;
-    this.location.longitude = lng;
-    this.trigger("change:location");
+    this.set({'location': {latitude: lat, longitude: lng}});
   }
 
   //get google location object
   ,gLocation: function() {
-    return new google.maps.LatLng(this.location.latitude, this.location.longitude);
+    return new google.maps.LatLng(this.get('location').latitude, this.get('location').longitude);
   }
 
   //broadcast method. strategy pattern

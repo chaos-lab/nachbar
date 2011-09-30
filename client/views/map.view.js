@@ -7,12 +7,11 @@ nachbar.views.MapView = Backbone.View.extend({
 
   ,className: "span-24"
 
-  ,defaultCenter: new google.maps.LatLng(32.060255, 118.796877)
-
   ,events: {
   }
 
   ,initialize: function() {
+    this.defaultCenter = new google.maps.LatLng(32.060255, 118.796877);
     this.render();
     this.map = this.createMap();
     this.getLocation();

@@ -10,23 +10,23 @@ nachbar.controllers.MeController = Backbone.Model.extend({
 
     nachbar.me.bind("change:location", function() {
       nachbar.views.showTip("location changed.", "notice", 2000);
-      if (nachbar.me.state == nachbar.models.Me.States.ONLINE) {
-        nachbar.socket.emit("update position", nachbar.me.location.latitude, nachbar.me.location.longitude);
+      if (nachbar.me.get('state') == nachbar.models.Me.States.ONLINE) {
+        nachbar.socket.emit("update position", nachbar.me.get('location').latitude, nachbar.me.get('location').longitude);
       }
       nachbar.nearbys.update();
     });
 
     nachbar.me.bind("login", function() {
-      nachbar.socket.emit("update position", nachbar.me.location.latitude, nachbar.me.location.longitude);
+      nachbar.socket.emit("update position", nachbar.me.get('location').latitude, nachbar.me.get('location').longitude);
       nachbar.nearbys.update();
     });
   }
 
   // nachbar.me instance method, this --> nachbar.me
   ,broadcast: function(msg) {
-    if (this.state == nachbar.models.Me.States.CONNECTED) {
+    if (this.get('state') == nachbar.models.Me.States.CONNECTED) {
       this.login(function() {
-        if (nachbar.me.state == nachbar.models.Me.States.ONLINE) nachbar.me.broadcast(msg);
+        if (nachbar.me.get('state') == nachbar.models.Me.States.ONLINE) nachbar.me.broadcast(msg);
       })
 
       return false;
@@ -40,15 +40,15 @@ nachbar.controllers.MeController = Backbone.Model.extend({
 
   // chat with someboy
   ,chat: function(to, msg) {
-    if (this.state == nachbar.models.Me.States.CONNECTED) {
+    if (this.get('state') == nachbar.models.Me.States.CONNECTED) {
       this.login(function() {
-        if (nachbar.me.state == nachbar.models.Me.States.ONLINE) nachbar.me.chat(to, msg);
+        if (nachbar.me.get('state') == nachbar.models.Me.States.ONLINE) nachbar.me.chat(to, msg);
       })
 
       return false;
     }
 
-    nachbar.messageBoxManager.chatBox(to.id).add(nachbar.me.name, msg);
+    nachbar.messageBoxManager.chatBox(to.id).add(nachbar.me.get('name'), msg);
     nachbar.socket.emit('private message', to.id, msg);
   }
 
