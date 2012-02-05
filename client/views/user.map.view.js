@@ -18,8 +18,8 @@ nachbar.views.UserMapView = Backbone.View.extend({
       self.infoWindow.close();
     }) 
 
-    google.maps.event.addListener(this.marker, 'dblclick', function() {
-      self.trigger("dblclick");
+    google.maps.event.addListener(this.marker, 'click', function() {
+      self.trigger("click");
     }) 
 
     this.model.bind("change:location", this.render, this);

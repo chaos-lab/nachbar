@@ -38,7 +38,7 @@ nachbar.controllers.NearbysController = Backbone.Model.extend({
       user.view = new nachbar.views.UserMapView( { model: user, map: nachbar.map });
 
       // listen to view events
-      user.view.bind("dblclick", function() {
+      user.view.bind("click", function() {
         // this --> user
         var talker = this;
         if (nachbar.messageBoxManager.existsChatBox(talker.id)) {
