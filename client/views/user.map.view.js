@@ -56,7 +56,7 @@ nachbar.views.UserMapView = Backbone.View.extend({
   //create info window
   ,createInfoWindow: function() {
     return new google.maps.InfoWindow({
-      content: "<strong>" + this.model.get('name') + "</strong>"
+      content: "<strong>" + this.model.get('name') + "</strong><p>Click to chat</p>"
     });
   }
 
